@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Mulish as FontSans } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import { ReactLenis } from "@/lib/lenis";
 import "../globals.css";
 
@@ -27,6 +28,8 @@ export default function RootLayout({
             <body
                className={`${fontSans.variable} relative flex h-screen items-center justify-center font-sans antialiased`}
             >
+               <Toaster />
+
                {children}
             </body>
          </html>
