@@ -36,3 +36,21 @@ export const logInSchema = z.object({
       .min(1, { message: "Password is required." })
       .min(8, { message: "Password must be at least 8 characters long." })
 });
+
+export const resetPasswordSchema = z
+   .object({
+      password: z
+         .string()
+         .min(1, { message: "Password is required." })
+         .min(8, { message: "Password must be at least 8 characters long." }),
+      confirmPassword: z.string().min(1, { message: "Confirm password is required." })
+   })
+   .superRefine(({ password, confirmPassword }, ctx) => {
+      if (password !== confirmPassword) {
+         ctx.addIssue({
+            code: "custom",
+            path: ["confirmPassword"],
+            message: "Passwords do not match"
+         });
+      }
+   });

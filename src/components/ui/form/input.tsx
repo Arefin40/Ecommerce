@@ -2,6 +2,7 @@
 
 import type { FieldError } from "react-hook-form";
 import * as React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 import { Label } from "./label";
@@ -22,10 +23,11 @@ export function Input({
    description,
    descriptionClass,
    error,
+   className,
    ...props
 }: InputProps) {
    return (
-      <div className="grow space-y-2.5">
+      <div className={cn("grow space-y-2.5", className)}>
          {label && (
             <Label htmlFor={name} className={labelClass}>
                {label}
@@ -41,6 +43,11 @@ export function Input({
    );
 }
 
+interface InputPasswordProps extends InputProps {
+   forgotPasswordUrl?: string;
+   forgotPasswordLabelClass?: string;
+}
+
 export function InputPassword({
    name,
    label,
@@ -48,16 +55,30 @@ export function InputPassword({
    description,
    descriptionClass,
    error,
+   className,
+   forgotPasswordUrl,
+   forgotPasswordLabelClass,
    ...props
-}: InputProps) {
+}: InputPasswordProps) {
    const [showPassword, setShowPassword] = React.useState(false);
 
    return (
-      <div className="grow space-y-2.5">
+      <div className={cn("grow space-y-2.5", className)}>
          {label && (
-            <Label htmlFor={name} className={labelClass}>
-               {label}
-            </Label>
+            <div className={cn("flex", { "items-center justify-between": forgotPasswordUrl })}>
+               <Label htmlFor={name} className={labelClass}>
+                  {label}
+               </Label>
+
+               {forgotPasswordUrl && (
+                  <Link
+                     href={forgotPasswordUrl}
+                     className={cn("text-xs font-semibold text-blue-600", forgotPasswordLabelClass)}
+                  >
+                     Forgot Password?
+                  </Link>
+               )}
+            </div>
          )}
 
          <InputBase
