@@ -6,11 +6,11 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Google } from "@/icons";
 import { Lock, User } from "lucide-react";
-import { Input, InputPassword, FormSeparator } from "@/components/ui/form";
-import { logInSchema } from "@/lib/auth-schema";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
+import { logInSchema } from "@/lib/auth-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Input, InputPassword, FormSeparator } from "@/components/ui/form";
 
 type FormFields = z.infer<typeof logInSchema>;
 
@@ -42,8 +42,8 @@ export default function SignInForm() {
                toast.success("Logged in successfully");
                reset();
             },
-            onError: () => {
-               toast.error("Log in failed!");
+            onError: (ctx) => {
+               toast.error(ctx.error.message || "Sign-in failed!");
             }
          }
       );
@@ -84,6 +84,7 @@ export default function SignInForm() {
                autoComplete="current-password"
                startIcon={<Lock className="text-muted-foreground size-4" />}
                error={errors.password}
+               forgotPasswordUrl="/forgot-password"
             />
          </div>
 

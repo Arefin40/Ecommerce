@@ -37,7 +37,7 @@
    --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
    --sidebar-border: oklch(0.928 0.006 264.531);
    --sidebar-ring: oklch(0.6 0.22 263.82);
-   --radius: 0.5rem;
+   --radius: 0.625rem;
 }
 
 .dark {
@@ -125,6 +125,10 @@
 }
 
 @layer utilities {
+   .box-container {
+      @apply container mx-auto px-4 sm:px-6 lg:px-8;
+   }
+
    .flex-center {
       @apply flex items-center justify-center;
    }

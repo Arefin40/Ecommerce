@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { ReactLenis } from "@/lib/lenis";
 import Image from "next/image";
 import Link from "next/link";
-import "../globals.css";
+import "../../globals.css";
 
 const fontSans = FontSans({
    variable: "--font-sans",
