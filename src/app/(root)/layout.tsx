@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Mulish as FontSans } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { ReactLenis } from "@/lib/lenis";
+import BackgroundGradients from "@/components/ui/gradients";
+import Sidebar from "@/components/Sidebar";
 import "../globals.css";
 
 const fontSans = FontSans({
@@ -23,16 +24,25 @@ export default function RootLayout({
    children: React.ReactNode;
 }>) {
    return (
-      <ReactLenis root>
-         <html lang="en">
-            <body
-               className={`${fontSans.variable} relative flex h-screen items-center justify-center font-sans antialiased`}
-            >
-               <Toaster />
+      <html lang="en">
+         <body
+            className={`${fontSans.variable} relative max-h-screen font-sans font-medium antialiased`}
+         >
+            <Toaster />
+            <BackgroundGradients />
 
-               {children}
-            </body>
-         </html>
-      </ReactLenis>
+            <main className="relative flex h-screen w-screen flex-col overflow-y-auto">
+               <section className="grid flex-1 grid-cols-[20rem_1fr]">
+                  <Sidebar />
+
+                  <section className="col-span-1 col-start-2 h-screen overflow-hidden p-3">
+                     <main className="shadow-card lex scroll-hide relative h-full flex-col space-y-6 overflow-y-auto rounded-lg bg-white p-3 text-justify">
+                        {children}
+                     </main>
+                  </section>
+               </section>
+            </main>
+         </body>
+      </html>
    );
 }
