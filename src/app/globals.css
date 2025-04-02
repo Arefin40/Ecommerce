@@ -113,6 +113,7 @@
    --color-sidebar-border: var(--sidebar-border);
    --color-sidebar-ring: var(--sidebar-ring);
    --shadow-card: 0 0 12px 4px rgba(0, 0, 0, 0.05);
+   --breakpoint-3xl: 87.5rem;
 }
 
 @layer base {
@@ -126,7 +127,7 @@
 
 @layer utilities {
    .box-container {
-      @apply container mx-auto px-4 sm:px-6 lg:px-8;
+      @apply container mx-auto px-4 sm:px-0;
    }
 
    .flex-center {
