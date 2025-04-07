@@ -29,8 +29,7 @@ export default function RootLayout({
          >
             <Toaster />
             <Header />
-
-            <main className="box-container size-full h-screen pt-20">{children}</main>
+            {children}
          </body>
       </html>
    );

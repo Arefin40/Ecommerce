@@ -96,7 +96,7 @@ function ProfileForm() {
          method="post"
          encType="multipart/form-data"
          onSubmit={handleSubmit(onSubmit)}
-         className="border-border grid grid-cols-[1fr_2fr] gap-x-12 gap-y-8 rounded-xl border p-6"
+         className="grid grid-cols-[1fr_2fr] gap-x-12 gap-y-8 rounded-xl bg-white p-6"
       >
          <div className="border-border space-y-1.5">
             <h2 className="text-lg font-bold">Personal Information</h2>
@@ -114,24 +114,26 @@ function ProfileForm() {
                   </p>
                </div>
 
-               <div className="relative inline-flex">
-                  <Image
-                     priority
-                     src={previewImage || session?.user.image || "/images/user.png"}
-                     alt="Profile picture"
-                     width="144"
-                     height="144"
-                     className="pointer-events-none size-36 rounded-full border border-gray-200 object-cover"
-                  />
+               <div className="inline-flex">
+                  <div className="relative">
+                     <Image
+                        priority
+                        src={previewImage || session?.user.image || "/images/user.png"}
+                        alt="Profile picture"
+                        width="144"
+                        height="144"
+                        className="pointer-events-none size-36 rounded-full border border-gray-200 object-cover"
+                     />
 
-                  <input
-                     multiple
-                     type="file"
-                     id="image"
-                     className="absolute inset-0 z-50 opacity-0"
-                     accept="image/png, image/jpeg, image/jpg"
-                     {...register("image")}
-                  />
+                     <input
+                        multiple
+                        type="file"
+                        id="image"
+                        className="absolute inset-0 z-50 opacity-0"
+                        accept="image/png, image/jpeg, image/jpg"
+                        {...register("image")}
+                     />
+                  </div>
 
                   {errors.image && (
                      <span className="text-destructive text-sm">

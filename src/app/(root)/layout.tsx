@@ -28,7 +28,6 @@ export default function RootLayout({
             className={`${fontSans.variable} relative h-screen bg-gray-50 font-sans font-medium antialiased`}
          >
             <Toaster />
-            {/* <BackgroundGradients /> */}
             <Header />
 
             <main className="box-container grid size-full h-screen grid-cols-[18rem_1fr_18rem] gap-4 border pt-20">

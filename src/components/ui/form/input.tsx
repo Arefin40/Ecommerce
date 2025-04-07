@@ -8,7 +8,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { Label } from "./label";
 import { InputBase, InputBaseProps } from "./input-base";
 
-interface InputProps extends InputBaseProps {
+export interface InputProps extends InputBaseProps {
    label?: string;
    labelClass?: string;
    description?: string;
