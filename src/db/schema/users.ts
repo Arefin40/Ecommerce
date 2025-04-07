@@ -1,4 +1,14 @@
-import { pgTable, pgEnum, text, uniqueIndex, timestamp, boolean } from "drizzle-orm/pg-core";
+import {
+   pgTable,
+   pgEnum,
+   text,
+   uuid,
+   serial,
+   uniqueIndex,
+   timestamp,
+   boolean
+} from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const userRoleEnum = pgEnum("user_role", ["user", "merchant", "admin"]);
 
@@ -20,6 +30,46 @@ export const user = pgTable(
    (t) => [uniqueIndex("email_index").on(t.email)]
 );
 export type User = typeof user.$inferInsert;
+
+export const address = pgTable(
+   "address",
+   {
+      id: uuid("id")
+         .primaryKey()
+         .default(sql`uuid_generate_v7()`),
+      name: text("name").notNull(),
+      address: text("address").notNull(),
+      contact: text("contact").notNull(),
+      userId: text("user_id")
+         .notNull()
+         .references(() => user.id, { onDelete: "cascade" }),
+      zone: serial("zone")
+         .notNull()
+         .references(() => zone.id, { onDelete: "cascade" }),
+      area: serial("area")
+         .notNull()
+         .references(() => area.id, { onDelete: "cascade" }),
+      createdAt: timestamp("created_at").notNull().defaultNow(),
+      updatedAt: timestamp("updated_at")
+         .notNull()
+         .defaultNow()
+         .$onUpdate(() => new Date())
+   },
+   (t) => [uniqueIndex("name_user_unique").on(t.name, t.userId)]
+);
+
+export const zone = pgTable("zone", {
+   id: serial("id").primaryKey(),
+   name: text("name").notNull()
+});
+
+export const area = pgTable("area", {
+   id: serial("id").primaryKey(),
+   name: text("name").notNull(),
+   zone: serial("zone")
+      .notNull()
+      .references(() => zone.id, { onDelete: "cascade" })
+});
 
 export const session = pgTable("session", {
    id: text("id").primaryKey(),

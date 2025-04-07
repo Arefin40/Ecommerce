@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "name_user_unique" ON "address" USING btree ("name","user_id");
