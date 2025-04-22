@@ -119,3 +119,20 @@ export const verification = pgTable("verification", {
       .defaultNow()
       .$onUpdate(() => new Date())
 });
+
+export const statusEnum = pgEnum("status", ["pending", "approved", "rejected"]);
+
+export const merchant_application = pgTable("merchant_application", {
+   id: uuid("id")
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
+   userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+   image: text("image"),
+   nid: text("nid").notNull(),
+   mobile: text("mobile").notNull(),
+   comment: text("comment"),
+   status: statusEnum("status").notNull().default("pending"),
+   createdAt: timestamp("created_at").notNull().defaultNow()
+});
