@@ -29,6 +29,9 @@ export default function SignInForm() {
          {
             onSuccess: () => {
                toast.success("Logged in successfully");
+            },
+            onError: (ctx) => {
+               toast.error(ctx.error.message || "Sign-in failed!");
             }
          }
       );

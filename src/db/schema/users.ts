@@ -36,7 +36,7 @@ export const address = pgTable(
    {
       id: uuid("id")
          .primaryKey()
-         .default(sql`uuid_generate_v7()`),
+         .default(sql`uuid_generate_v4()`),
       name: text("name").notNull(),
       address: text("address").notNull(),
       contact: text("contact").notNull(),

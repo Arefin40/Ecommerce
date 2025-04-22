@@ -29,7 +29,8 @@ export default function SignUpForm() {
             email,
             password,
             name: fname + " " + lname,
-            callbackURL: "/"
+            callbackURL: "/",
+            role: "user"
          },
          {
             onSuccess: () => {
