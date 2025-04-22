@@ -11,4 +11,9 @@ export type Address = {
 
 declare global {
    type Option = Record<"value" | "label", string> & Record<string, string>;
+
+   interface DashboardIconProps extends React.SVGProps<SVGSVGElement> {
+      active?: boolean;
+      filled?: boolean;
+   }
 }
