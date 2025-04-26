@@ -43,3 +43,35 @@ export async function merchantApplication({ id, nid, mobile }: MerchantApplicati
       return { success: false, error: "Failed to create merchant application" };
    }
 }
+
+export async function getAllMerchantApplications() {
+   "use server";
+   const merchantApplications = await db
+      .select({
+         id: merchant_application.id,
+         name: user.name,
+         nid: merchant_application.nid,
+         mobile: merchant_application.mobile,
+         status: merchant_application.status
+      })
+      .from(merchant_application)
+      .leftJoin(user, eq(merchant_application.userId, user.id))
+      .execute();
+   return merchantApplications;
+}
+
+export async function changeStatus(id: string, status: string) {
+   "use server";
+   try {
+      await db
+         .update(merchant_application)
+         .set({ status: status as "pending" | "approved" | "rejected" })
+         .where(eq(merchant_application.id, id))
+         .execute();
+      revalidatePath("/merchant-requests");
+      return { success: true, message: "Status updated successfully" };
+   } catch (error) {
+      console.error("Error updating status:", error);
+      return { success: false, error: "Failed to update status" };
+   }
+}
