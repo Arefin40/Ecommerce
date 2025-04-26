@@ -28,9 +28,6 @@ export default function DashboardLoginForm({ formType }: { formType: "merchant" 
       await authClient.signIn.email(
          { email, password, callbackURL: "/dashboard" },
          {
-            onSuccess: () => {
-               toast.success("Logged in successfully");
-            },
             onError: (ctx) => {
                toast.error(ctx.error.message || "Sign-in failed!");
             }

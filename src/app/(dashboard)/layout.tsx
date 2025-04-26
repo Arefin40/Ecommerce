@@ -2,24 +2,17 @@ import "../globals.css";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import {
-   DropdownMenu,
-   DropdownMenuTrigger,
-   DropdownMenuLabel,
-   DropdownMenuContent,
-   DropdownMenuSeparator,
-   DropdownMenuGroup,
-   DropdownMenuItem
-} from "@/components/ui/dropdown-menu";
-import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import { Mulish as FontSans } from "next/font/google";
-import { ChevronRight, LifeBuoy, LogOut, PanelLeft } from "lucide-react";
+import { PanelLeft } from "lucide-react";
 import { DashboardBlocks } from "@/icons";
 import { DashboardMenuItems } from "@/lib/data/dashboard";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import type { Metadata } from "next";
+import UserDropdown from "./UserDropdown";
+
 const fontSans = FontSans({
    variable: "--font-sans",
    subsets: ["latin"]
@@ -39,9 +32,10 @@ export default async function RootLayout({
    children: React.ReactNode;
 }>) {
    const session = await auth.api.getSession({ headers: await headers() });
-   if (!session) redirect("/merchant");
+   if (!session?.user) redirect("/admin");
 
-   const role = (process.env.NEXT_PUBLIC_ROLE as keyof typeof DashboardMenuItems) || "admin";
+   const role = session.user.role as keyof typeof DashboardMenuItems;
+   if (!(role === "admin" || role === "merchant")) redirect("/login");
 
    return (
       <html lang="en">
@@ -114,37 +108,6 @@ export default async function RootLayout({
       </html>
    );
 }
-
-const UserDropdown = () => {
-   return (
-      <DropdownMenu>
-         <DropdownMenuTrigger asChild>
-            <button className="flex-center hover:bg-accent text-muted-foreground hover:text-foreground size-7 shrink-0 rounded-full">
-               <ChevronRight className="size-5" />
-            </button>
-         </DropdownMenuTrigger>
-
-         <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-               <DropdownMenuItem>
-                  <LifeBuoy className="text-muted-foreground size-4" />
-                  Support
-               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuGroup>
-               <DropdownMenuItem asChild>
-                  <button className="w-full">
-                     <LogOut className="text-muted-foreground size-4" />
-                     Logout
-                  </button>
-               </DropdownMenuItem>
-            </DropdownMenuGroup>
-         </DropdownMenuContent>
-      </DropdownMenu>
-   );
-};
 
 type DashboardMenuItemProps = React.ComponentProps<"li"> & {
    href: string;
