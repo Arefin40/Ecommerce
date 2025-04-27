@@ -48,23 +48,26 @@ export async function createPost(data: { content: string; image?: string; produc
 export async function getAllPosts() {
    "use server";
    try {
-      const _posts = await db.select().from(post).leftJoin(store, eq(post.store, store.id));
+      const _posts = await db
+         .select({
+            id: post.id,
+            content: post.content,
+            total_likes: post.total_likes,
+            createdAt: post.createdAt,
+            store: { name: store.name, slug: store.slug, logo: store.logo }
+         })
+         .from(post)
+         .leftJoin(store, eq(post.store, store.id));
 
       const postsWithProducts = await Promise.all(
-         _posts.map(async ({ post, store: _store }) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { store, ...restPost } = post;
-
-            const _products = await db
-               .select({ image: product.image })
+         _posts.map(async (post) => {
+            const _post_products = await db
+               .select({ id: product.id, image: product.image })
                .from(post_products)
                .where(eq(post_products.post, post.id))
                .leftJoin(product, eq(post_products.product, product.id));
-            return {
-               ...restPost,
-               store: { name: _store?.name, slug: _store?.slug, logo: _store?.logo as string },
-               products: _products.map((product) => product.image)
-            };
+
+            return { ...post, products: _post_products };
          })
       );
 

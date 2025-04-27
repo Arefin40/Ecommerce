@@ -1,8 +1,9 @@
 import Image from "next/image";
-import FollowButton from "./FollowButton";
+import FollowButton from "@/components/FollowButton";
 import PostLikeButton from "./PostLikeButton";
 import { getFollowedStores, getStores } from "@/actions/store";
 import { getAllPosts, getLinkedPost } from "@/actions/social";
+import Link from "next/link";
 
 export default async function Home() {
    const stores = await getStores();
@@ -14,15 +15,15 @@ export default async function Home() {
       <main className="box-container grid size-full h-screen grid-cols-[18rem_1fr_18rem] gap-4 pt-20">
          <aside className="rounded-xl bg-white p-6">Left Sidebar</aside>
 
-         <main className="space-y-6 rounded-xl bg-white p-6">
+         <main className="scrollbar-hide space-y-6 overflow-y-auto rounded-xl bg-white p-6">
             {posts.data?.map((post) => (
-               <div key={post.id} className="rounded-lg border border-gray-100 bg-white shadow-sm">
+               <div key={post.id} className="rounded-lg border border-gray-100 bg-white">
                   {/* Post Header */}
                   <header className="flex items-center gap-3 border-b border-gray-100 px-6 py-2.5">
                      <div className="size-12 flex-shrink-0 rounded-full bg-gray-200">
                         <Image
-                           src={post.store.logo}
-                           alt={post.store.name as string}
+                           src={post.store?.logo ?? ""}
+                           alt={post.store?.name ?? ""}
                            width={48}
                            height={48}
                            className="size-12 rounded-full"
@@ -30,10 +31,14 @@ export default async function Home() {
                      </div>
                      <div className="grid">
                         <p className="flex items-center gap-x-2">
-                           <span className="text-foreground font-semibold">{post.store.name}</span>
-                           <span className="text-muted-foreground text-sm">@{post.store.slug}</span>
+                           <span className="text-foreground font-semibold">{post.store?.name}</span>
+                           <span className="text-muted-foreground text-sm">
+                              @{post.store?.slug}
+                           </span>
                         </p>
-                        <span className="text-muted-foreground text-sm">2h ago</span>
+                        <span className="text-muted-foreground text-sm">
+                           {post.createdAt.toLocaleString()}
+                        </span>
                      </div>
                   </header>
 
@@ -53,21 +58,21 @@ export default async function Home() {
                            }`}
                         >
                            {post.products.map((product, index) => (
-                              <a
+                              <Link
                                  key={index}
-                                 href="#"
+                                 href={`/products/${product?.id}/details`}
                                  className={`block h-full max-h-[25rem] w-full ${
                                     post.products.length === 3 && index === 0 ? "row-span-2" : ""
                                  }`}
                               >
                                  <Image
-                                    src={product as string}
+                                    src={product.image ?? ""}
                                     alt={`Product ${index + 1}`}
                                     width={400}
                                     height={200}
-                                    className="h-full w-full object-cover"
+                                    className="h-full w-full object-cover object-top"
                                  />
-                              </a>
+                              </Link>
                            ))}
                         </div>
                      )}
