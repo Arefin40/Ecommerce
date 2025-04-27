@@ -1,13 +1,13 @@
 "use server";
 
 import { db } from "@/db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { store } from "@/db/schema/store";
 import { revalidatePath } from "next/cache";
 import { product } from "@/db/schema/product";
-import { post, post_products } from "@/db/schema/social";
+import { post, post_products, post_likes } from "@/db/schema/social";
 
 export async function createPost(data: { content: string; image?: string; products: string[] }) {
    "use server";
@@ -48,18 +48,21 @@ export async function createPost(data: { content: string; image?: string; produc
 export async function getAllPosts() {
    "use server";
    try {
-      const _posts = await db.select().from(post);
+      const _posts = await db.select().from(post).leftJoin(store, eq(post.store, store.id));
 
       const postsWithProducts = await Promise.all(
-         _posts.map(async (post) => {
+         _posts.map(async ({ post, store: _store }) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { store, ...restPost } = post;
+
             const _products = await db
                .select({ image: product.image })
                .from(post_products)
                .where(eq(post_products.post, post.id))
                .leftJoin(product, eq(post_products.product, product.id));
-
             return {
-               ...post,
+               ...restPost,
+               store: { name: _store?.name, slug: _store?.slug, logo: _store?.logo as string },
                products: _products.map((product) => product.image)
             };
          })
@@ -201,4 +204,56 @@ export async function getPostsMyStorePosts() {
       console.error("Error getting posts by store:", error);
       return { success: false, error: "Failed to get posts by store" };
    }
+}
+
+export async function toggleLikePost(postId: string) {
+   "use server";
+   try {
+      // Check if user is authenticated
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      // Check if the post exists
+      const _post = await db.select().from(post).where(eq(post.id, postId));
+      if (_post.length === 0) throw new Error("Post not found");
+
+      // Check if the user has already liked the post
+      const _like = await db.select().from(post_likes).where(eq(post_likes.post, postId));
+
+      if (_like.length > 0) {
+         // Delete the like
+         await db.delete(post_likes).where(eq(post_likes.post, postId));
+         await db
+            .update(post)
+            .set({ total_likes: sql`total_likes - 1` })
+            .where(eq(post.id, postId));
+      } else {
+         // Create the like
+         await db.insert(post_likes).values({ post: postId, user: session.user.id });
+         await db
+            .update(post)
+            .set({ total_likes: sql`total_likes + 1` })
+            .where(eq(post.id, postId));
+      }
+
+      revalidatePath("/");
+      return { success: true, message: "Post liked successfully" };
+   } catch (error) {
+      console.error("Error toggling like post:", error);
+      return { success: false, error: "Failed to toggle like post" };
+   }
+}
+
+export async function getLinkedPost() {
+   "use server";
+
+   const session = await auth.api.getSession({ headers: await headers() });
+   if (!session?.user) return [];
+
+   const linkedPosts = await db
+      .select()
+      .from(post_likes)
+      .where(eq(post_likes.user, session.user.id));
+
+   return linkedPosts.map((post) => post.post);
 }
