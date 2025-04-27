@@ -8,6 +8,13 @@
       "when": 1745324597054,
       "tag": "0000_low_rumiko_fujikawa",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1745754478134,
+      "tag": "0001_youthful_mole_man",
+      "breakpoints": true
     }
   ]
 }
