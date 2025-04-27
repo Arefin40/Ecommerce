@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getImageSchema } from "@/lib/utils";
 
 export const merchantFormSchema = z.object({
    name: z
@@ -24,3 +25,13 @@ export const merchantFormSchema = z.object({
 });
 
 export type MerchantFormValues = z.infer<typeof merchantFormSchema>;
+
+export const storeFormSchema = z.object({
+   name: z.string().min(2, "Name must be at least 2 characters"),
+   slug: z.string().min(2, "Slug must be at least 2 characters"),
+   description: z.string().min(10, "Description must be at least 10 characters"),
+   logo: getImageSchema(2 * 1024 * 1024, true),
+   cover: getImageSchema(5 * 1024 * 1024, true)
+});
+
+export type StoreFormValues = z.infer<typeof storeFormSchema>;

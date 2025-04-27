@@ -12,3 +12,7 @@ export { default as MerchantRequests } from "./MerchantRequests";
 export { default as Orders } from "./Orders";
 export { default as Posts } from "./Posts";
 export { default as User } from "./User";
+
+// Store Icons
+export { default as StoreLogo } from "./StoreLogo";
+export { default as StoreProduct } from "./StoreProduct";
