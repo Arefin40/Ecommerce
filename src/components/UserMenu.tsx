@@ -56,7 +56,10 @@ function UserMenu() {
                      </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                     onClick={() => authClient.signOut()}
+                     className="flex items-center gap-2 text-sm"
+                  >
                      <LogOut className="text-foreground size-4" />
                      <span>Log Out</span>
                   </DropdownMenuItem>

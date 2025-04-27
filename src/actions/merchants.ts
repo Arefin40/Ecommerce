@@ -1,12 +1,16 @@
 "use server";
 
 import { db } from "@/db";
-import { user, merchant_application } from "@/db/schema/users";
+import { Resend } from "resend";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { user, merchant_application } from "@/db/schema/users";
+import { MerchantRequestApprovedEmail } from "@/emails/merchant-request-approved";
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface MerchantApplicationData {
    id: string;
@@ -60,18 +64,56 @@ export async function getAllMerchantApplications() {
    return merchantApplications;
 }
 
-export async function changeStatus(id: string, status: string) {
+export async function approveApplication(id: string) {
+   "use server";
+   try {
+      // Get the merchant application and associated user
+      const updatedApplication = await db
+         .update(merchant_application)
+         .set({ status: "approved" })
+         .where(eq(merchant_application.id, id))
+         .returning();
+
+      if (!updatedApplication || updatedApplication.length === 0) {
+         return { success: false, error: "Merchant application not found" };
+      }
+
+      // Get the merchant user
+      const merchantUser = await db
+         .select()
+         .from(user)
+         .where(eq(user.id, updatedApplication[0].userId))
+         .execute();
+
+      // Send approval email
+      const { email, name } = merchantUser[0];
+      await resend.emails.send({
+         from: "SHOBAI <onboarding@resend.dev>",
+         to: email,
+         subject: "Merchant Application Approved",
+         react: MerchantRequestApprovedEmail({ name })
+      });
+
+      revalidatePath("/merchant-requests");
+      return { success: true, message: "Merchant approved successfully" };
+   } catch (error) {
+      console.error("Error approving merchant:", error);
+      return { success: false, error: "Failed to approve merchant" };
+   }
+}
+
+export async function rejectApplication(id: string) {
    "use server";
    try {
       await db
          .update(merchant_application)
-         .set({ status: status as "pending" | "approved" | "rejected" })
+         .set({ status: "rejected" })
          .where(eq(merchant_application.id, id))
          .execute();
       revalidatePath("/merchant-requests");
-      return { success: true, message: "Status updated successfully" };
+      return { success: true, message: "Merchant application rejected" };
    } catch (error) {
-      console.error("Error updating status:", error);
-      return { success: false, error: "Failed to update status" };
+      console.error("Error rejecting merchant:", error);
+      return { success: false, error: "Failed to reject merchant application" };
    }
 }

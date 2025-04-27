@@ -18,7 +18,7 @@ interface EmailProps {
    name?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const MerchantRequestApprovedEmail = ({ name }: EmailProps) => {
    return (
@@ -54,11 +54,11 @@ export const MerchantRequestApprovedEmail = ({ name }: EmailProps) => {
                }
             }}
          >
-            <Body className="flex h-screen items-center justify-center bg-gray-50 font-sans text-base">
+            <Body className="flex h-screen items-center justify-center bg-gray-50 font-sans text-base text-black">
                <Container className="text-base">
                   <Container className="rounded-2xl border bg-white px-45 pt-10 pb-4">
                      <Img
-                        src={`${baseUrl}/static/shobai-logo.svg`}
+                        src="https://res.cloudinary.com/arefin40/image/upload/v1745733229/shobai/st7rwd3iijoi0lfcgnih.png"
                         height="16"
                         alt="SHOBAI"
                         className="mx-auto"
@@ -69,7 +69,7 @@ export const MerchantRequestApprovedEmail = ({ name }: EmailProps) => {
                      </Heading>
 
                      <Img
-                        src={`${baseUrl}/static/confetti.svg`}
+                        src="https://res.cloudinary.com/arefin40/image/upload/v1745733229/shobai/ahskonbqhy7njrfcbkbo.png"
                         height="128"
                         alt="confetti"
                         className="mx-auto"

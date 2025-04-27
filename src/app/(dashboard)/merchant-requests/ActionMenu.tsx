@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
-import { changeStatus } from "@/actions/merchants";
+import { approveApplication, rejectApplication } from "@/actions/merchants";
 
 interface ActionMenuProps {
    id: string;
@@ -23,10 +23,8 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ id, disabled = false }) => {
             </Button>
          </DropdownMenuTrigger>
          <DropdownMenuContent side="right">
-            <DropdownMenuItem onClick={() => changeStatus(id, "approved")}>
-               Approve
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeStatus(id, "rejected")}>Reject</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => approveApplication(id)}>Approve</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => rejectApplication(id)}>Reject</DropdownMenuItem>
          </DropdownMenuContent>
       </DropdownMenu>
    );

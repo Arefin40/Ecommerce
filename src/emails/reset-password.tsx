@@ -19,7 +19,7 @@ interface EmailProps {
    resetUrl: string;
 }
 
-const baseUrl = process.env.BETTER_AUTH_URL ? `https://${process.env.BETTER_AUTH_URL}` : "";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const ResetPasswordEmail = ({ name, resetUrl }: EmailProps) => {
    return (
