@@ -5,7 +5,7 @@ import { store } from "@/db/schema/store";
 import { product, product_images } from "@/db/schema/product";
 import { auth } from "@/lib/auth";
 import { ProductDBValues } from "@/lib/validation/product";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { headers } from "next/headers";
 
 export async function createProduct(data: ProductDBValues) {
@@ -48,6 +48,33 @@ export async function createProduct(data: ProductDBValues) {
 export async function getAllProducts() {
    "use server";
    return await db.select().from(product);
+}
+
+export async function getMyStoreProducts() {
+   "use server";
+
+   try {
+      // check if user is authenticated
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user || session.user.role !== "merchant") throw new Error("Unauthorized");
+
+      // check if store exists
+      const _store = await db.select().from(store).where(eq(store.merchant, session.user.id));
+      if (!_store) throw new Error("Store not found");
+
+      // get products
+      const products = await db
+         .select({ id: product.id, name: product.name, image: product.image })
+         .from(product)
+         .where(eq(product.storeId, _store[0].id))
+         .orderBy(desc(product.createdAt));
+      return { success: true, data: products };
+   } catch (error) {
+      if (error instanceof Error) {
+         return { success: false, message: error.message };
+      }
+      return { success: false, message: "Failed to get products" };
+   }
 }
 
 export async function getProductById(id: string) {
