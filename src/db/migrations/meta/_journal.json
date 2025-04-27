@@ -22,6 +22,13 @@
       "when": 1745755270415,
       "tag": "0002_sleepy_impossible_man",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1745765721049,
+      "tag": "0003_lethal_skin",
+      "breakpoints": true
     }
   ]
 }

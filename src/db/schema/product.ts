@@ -4,7 +4,7 @@ import {
    timestamp,
    integer,
    uuid,
-   uniqueIndex,
+   index,
    serial,
    boolean
 } from "drizzle-orm/pg-core";
@@ -41,7 +41,7 @@ export const product_images = pgTable(
          .references(() => product.id, { onDelete: "cascade" }),
       image: text("image").notNull()
    },
-   (t) => [uniqueIndex("by_product").on(t.product)]
+   (t) => [index("by_product").on(t.product)]
 );
 
 export const product_reviews = pgTable("product_reviews", {
