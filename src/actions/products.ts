@@ -47,7 +47,17 @@ export async function createProduct(data: ProductDBValues) {
 
 export async function getAllProducts() {
    "use server";
-   return await db.select().from(product);
+   return await db
+      .select({
+         id: product.id,
+         name: product.name,
+         price: product.price,
+         image: product.image,
+         store: { slug: store.slug, name: store.name, logo: store.logo }
+      })
+      .from(product)
+      .leftJoin(store, eq(product.storeId, store.id))
+      .orderBy(desc(product.createdAt));
 }
 
 export async function getMyStoreProducts() {
@@ -79,9 +89,33 @@ export async function getMyStoreProducts() {
 
 export async function getProductById(id: string) {
    "use server";
-   const productData = await db.select().from(product).where(eq(product.id, id));
+   const productData = await db
+      .select({
+         id: product.id,
+         name: product.name,
+         image: product.image,
+         category: product.category,
+         description: product.description,
+         price: product.price,
+         stock: product.stock,
+         total_likes: product.total_likes,
+         createdAt: product.createdAt,
+         isActive: product.isActive,
+         store: {
+            id: store.id,
+            name: store.name,
+            logo: store.logo,
+            slug: store.slug
+         }
+      })
+      .from(product)
+      .where(eq(product.id, id))
+      .leftJoin(store, eq(product.storeId, store.id));
+
    const images = await db.select().from(product_images).where(eq(product_images.product, id));
-   return [{ ...productData[0], images: images.map((img) => img.image) }];
+   return [
+      { ...productData[0], images: images.map((img) => img.image), store: productData[0].store }
+   ];
 }
 
 export async function updateProduct(id: string, data: ProductDBValues) {
