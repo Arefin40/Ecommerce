@@ -7,9 +7,14 @@ import { cn } from "@/lib/utils";
 interface FollowButtonProps {
    storeId: string;
    isFollowed: boolean;
+   className?: string;
 }
 
-export default function FollowButton({ storeId, isFollowed = false }: FollowButtonProps) {
+export default function FollowButton({
+   storeId,
+   isFollowed = false,
+   className
+}: FollowButtonProps) {
    const toggleFollow = async (storeId: string) => {
       await toggleFollowStore(storeId, "/");
    };
@@ -22,7 +27,8 @@ export default function FollowButton({ storeId, isFollowed = false }: FollowButt
             "rounded-full py-4 text-sm",
             isFollowed
                ? "bg-gray-200 text-gray-600 hover:bg-gray-200/90"
-               : "bg-primary text-primary-foreground hover:bg-primary/90"
+               : "bg-primary text-primary-foreground hover:bg-primary/90",
+            className
          )}
       >
          {isFollowed ? "Following" : "Follow"}

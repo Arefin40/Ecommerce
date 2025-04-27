@@ -46,3 +46,17 @@ export const post_likes = pgTable(
    },
    (t) => [index("by_like_post").on(t.post)]
 );
+
+export const wishlist = pgTable(
+   "wishlist",
+   {
+      user: text("user_id")
+         .notNull()
+         .references(() => user.id, { onDelete: "cascade" }),
+      product: uuid("product_id")
+         .notNull()
+         .references(() => product.id, { onDelete: "cascade" }),
+      createdAt: timestamp("created_at").notNull().defaultNow()
+   },
+   (t) => [index("by_wishlist_user").on(t.user)]
+);
