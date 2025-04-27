@@ -82,24 +82,7 @@ export default async function RootLayout({
                </div>
 
                <div className="px-6">
-                  <div className="border-border flex items-center justify-between border-t py-5">
-                     <div className="flex items-center gap-3">
-                        <Image
-                           priority
-                           src="/images/GoodyBro.png"
-                           alt="Logo"
-                           width={40}
-                           height={40}
-                           className="size-10 shrink-0 rounded-full"
-                        />
-
-                        <div className="">
-                           <h4 className="font-semibold">Goody Bro</h4>
-                           <p className="text-muted-foreground text-xs">@goodybro</p>
-                        </div>
-                     </div>
-                     <UserDropdown />
-                  </div>
+                  <UserDropdown />
                </div>
             </aside>
 
