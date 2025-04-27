@@ -85,6 +85,13 @@ export async function approveApplication(id: string) {
          .where(eq(user.id, updatedApplication[0].userId))
          .execute();
 
+      // Update user role to merchant
+      await db
+         .update(user)
+         .set({ role: "merchant" })
+         .where(eq(user.id, updatedApplication[0].userId))
+         .execute();
+
       // Send approval email
       const { email, name } = merchantUser[0];
       await resend.emails.send({
