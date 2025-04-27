@@ -15,6 +15,13 @@
       "when": 1745754478134,
       "tag": "0001_youthful_mole_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1745755270415,
+      "tag": "0002_sleepy_impossible_man",
+      "breakpoints": true
     }
   ]
 }
