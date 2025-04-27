@@ -10,10 +10,12 @@ import { signUpSchema } from "@/lib/auth-schema";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 type FormFields = z.infer<typeof signUpSchema>;
 
 export default function SignUpForm() {
+   const router = useRouter();
    const {
       register,
       reset,
@@ -36,6 +38,7 @@ export default function SignUpForm() {
             onSuccess: () => {
                toast.success("Account created successfully");
                reset();
+               router.push("/");
             },
             onError: () => {
                toast.error("Failed to create account");
@@ -51,6 +54,7 @@ export default function SignUpForm() {
             onSuccess: () => {
                toast.success("Account created successfully");
                reset();
+               router.push("/");
             },
             onError: () => {
                toast.error("Failed to log in!");

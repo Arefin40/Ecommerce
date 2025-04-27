@@ -14,6 +14,7 @@ import {
    DropdownMenuSeparator,
    DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 const DropdownNavigationMenu = {
    user: [
@@ -23,7 +24,13 @@ const DropdownNavigationMenu = {
 };
 
 function UserMenu() {
+   const router = useRouter();
    const { data: session } = authClient.useSession();
+
+   const handleLogout = async () => {
+      await authClient.signOut();
+      router.push("/login");
+   };
 
    return (
       <DropdownMenu>
@@ -57,7 +64,7 @@ function UserMenu() {
                   ))}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                     onClick={() => authClient.signOut()}
+                     onClick={handleLogout}
                      className="flex items-center gap-2 text-sm"
                   >
                      <LogOut className="text-foreground size-4" />
@@ -67,7 +74,7 @@ function UserMenu() {
             ) : (
                <>
                   <DropdownMenuItem>
-                     <Link href="/login" className="flex items-center gap-2">
+                     <Link href="/login" className="flex w-full items-center gap-2">
                         <LogIn className="text-foreground size-4" />
                         <span>Log in</span>
                      </Link>
