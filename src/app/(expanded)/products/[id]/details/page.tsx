@@ -5,7 +5,7 @@ import { getFollowedStores } from "@/actions/store";
 import FollowButton from "@/components/FollowButton";
 import DetailsActionButtons from "./DetailsActionButtons";
 
-async function ProductDetailsPage({ params }: { params: { id: string } }) {
+async function ProductDetailsPage({ params }: { params: Promise<{ id: string }> }) {
    const { id } = await params;
    const productData = await getProductById(id);
    const followedStores = await getFollowedStores();

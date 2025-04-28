@@ -52,7 +52,14 @@ export async function getAllProducts() {
          id: product.id,
          name: product.name,
          price: product.price,
+         category: product.category,
+         description: product.description,
+         stock: product.stock,
          image: product.image,
+         isActive: product.isActive,
+         total_likes: product.total_likes,
+         total_sales: product.total_sales,
+         createdAt: product.createdAt,
          store: { slug: store.slug, name: store.name, logo: store.logo }
       })
       .from(product)
