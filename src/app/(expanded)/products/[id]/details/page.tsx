@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import FollowButton from "@/components/FollowButton";
 import { getProductById } from "@/actions/products";
 import { getFollowedStores } from "@/actions/store";
+import FollowButton from "@/components/FollowButton";
 import DetailsActionButtons from "./DetailsActionButtons";
 
 async function ProductDetailsPage({ params }: { params: { id: string } }) {
-   const productData = await getProductById(params.id);
+   const { id } = await params;
+   const productData = await getProductById(id);
    const followedStores = await getFollowedStores();
 
    if (productData.length === 0) redirect("/products");

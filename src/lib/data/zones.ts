@@ -1,4 +1,4 @@
-const zones = [
+export const zones = [
    { value: "1", label: "Barguna" },
    { value: "2", label: "Barisal" },
    { value: "3", label: "Bhola" },
