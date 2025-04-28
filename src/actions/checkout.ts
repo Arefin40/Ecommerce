@@ -181,3 +181,86 @@ export async function getWishlistItems() {
       return { success: false, error: "Failed to get wishlist items" };
    }
 }
+
+// Get cart items count and total price
+export async function getCartDetails() {
+   "use server";
+   try {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      const cartItems = await db
+         .select({
+            quantity: cartItem.quantity,
+            price: product.price
+         })
+         .from(cartItem)
+         .where(eq(cartItem.user, session.user.id))
+         .leftJoin(product, eq(cartItem.product, product.id));
+
+      const { totalPrice, totalQuantity } = cartItems.reduce(
+         (acc, item) => {
+            return {
+               totalPrice: acc.totalPrice + item.quantity * (item.price || 0),
+               totalQuantity: acc.totalQuantity + item.quantity
+            };
+         },
+         { totalPrice: 0, totalQuantity: 0 }
+      );
+
+      return { success: true, data: { count: totalQuantity, totalPrice } };
+   } catch (error) {
+      console.error("Error getting cart details:", error);
+      return { success: false, error: "Failed to get cart details" };
+   }
+}
+
+export async function deleteCartItem(productId: string) {
+   "use server";
+   try {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      await db
+         .delete(cartItem)
+         .where(and(eq(cartItem.user, session.user.id), eq(cartItem.product, productId)));
+
+      revalidatePath("/cart");
+      return { success: true, message: "Cart item deleted" };
+   } catch (error) {
+      console.error("Error deleting cart item:", error);
+      return { success: false, error: "Failed to delete cart item" };
+   }
+}
+
+export async function clearCart() {
+   "use server";
+   try {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      await db.delete(cartItem).where(eq(cartItem.user, session.user.id));
+
+      revalidatePath("/cart");
+      return { success: true, message: "Cart cleared" };
+   } catch (error) {
+      console.error("Error clearing cart:", error);
+      return { success: false, error: "Failed to clear cart" };
+   }
+}
+
+export async function clearWishlist() {
+   "use server";
+   try {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      await db.delete(wishlist).where(eq(wishlist.user, session.user.id));
+
+      revalidatePath("/wishlist");
+      return { success: true, message: "Wishlist cleared" };
+   } catch (error) {
+      console.error("Error clearing wishlist:", error);
+      return { success: false, error: "Failed to clear wishlist" };
+   }
+}

@@ -1,7 +1,7 @@
-import { getAllProducts } from "@/actions/products";
 import Image from "next/image";
-import { Heart, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import { getAllProducts } from "@/actions/products";
+import { WishlistButton, AddToCartButton } from "./ProductCartButton";
 
 async function page() {
    const products = await getAllProducts();
@@ -22,12 +22,7 @@ async function page() {
                      />
                   </Link>
 
-                  <Link
-                     href="#"
-                     className="absolute top-3 right-3 z-10 block size-8 rounded-full bg-white/75 p-1.5 backdrop-blur-sm transition-transform hover:scale-110"
-                  >
-                     <Heart className="size-full text-rose-500" />
-                  </Link>
+                  <WishlistButton productId={product.id} />
 
                   <div className="absolute top-full left-1/2 flex -translate-x-1/2 items-center gap-x-1 transition-all duration-300 group-hover:-translate-y-12">
                      <Link
@@ -43,12 +38,7 @@ async function page() {
                         />
                         <span>{product.store?.name}</span>
                      </Link>
-                     <Link
-                        href="#"
-                        className="text-foreground flex flex-shrink-0 items-center gap-x-1 rounded-full bg-white/75 p-3 py-2 text-sm backdrop-blur-sm"
-                     >
-                        <ShoppingCart className="size-4" />
-                     </Link>
+                     <AddToCartButton productId={product.id} />
                   </div>
                </div>
 

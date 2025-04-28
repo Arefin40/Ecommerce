@@ -1,11 +1,11 @@
 "use client";
 
 import EmptyWishlist from "@/icons/EmptyWishlist";
-import { getWishlistItems, toggleWishlistItem } from "@/actions/checkout";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
+import { clearWishlist, getWishlistItems, toggleWishlistItem } from "@/actions/checkout";
 
 interface WishlistItem {
    user: string;
@@ -27,11 +27,17 @@ export default function WishlistPage() {
       setToggle((prev) => !prev);
    };
 
+   const handleClearWishlist = async () => {
+      await clearWishlist();
+      setToggle((prev) => !prev);
+   };
+
    useEffect(() => {
       const fetchWishlistItems = async () => {
          const { success, data } = await getWishlistItems();
          if (success && data) setWishlistItems(data);
       };
+
       fetchWishlistItems();
    }, [toggle]);
 
@@ -42,11 +48,18 @@ export default function WishlistPage() {
                <h1 className="text-foreground text-2xl font-bold">Wishlist</h1>
                <div className="flex items-center gap-4">
                   <p className="space-x-1.5">
-                     <span className="text-foreground font-semibold">0</span>
+                     <span className="text-foreground font-semibold">
+                        {wishlistItems.length || 0}
+                     </span>
                      <span>items</span>
                   </p>
                   <div className="h-8 w-[1px] bg-gray-200"></div>
-                  <button className="hover:text-primary transition-colors">Clear All</button>
+                  <button
+                     onClick={handleClearWishlist}
+                     className="hover:text-primary transition-colors"
+                  >
+                     Clear All
+                  </button>
                </div>
             </header>
 
