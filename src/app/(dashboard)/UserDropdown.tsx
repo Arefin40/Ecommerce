@@ -13,9 +13,11 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { ChevronRight, LifeBuoy, LogOut } from "lucide-react";
 import { redirect } from "next/navigation";
+import { useSession } from "@/context/session";
 
 const UserDropdown = () => {
-   const { data: session } = authClient.useSession();
+   const { user } = useSession();
+
    const signOut = async () => {
       await authClient.signOut();
       redirect("/admin");
@@ -26,7 +28,7 @@ const UserDropdown = () => {
          <div className="flex items-center gap-3">
             <Image
                priority
-               src={session?.user.image || "/images/user.png"}
+               src={user?.image || "/images/user.png"}
                alt="Logo"
                width={40}
                height={40}
@@ -34,8 +36,8 @@ const UserDropdown = () => {
             />
 
             <div className="">
-               <h4 className="font-semibold">{session?.user.name}</h4>
-               <p className="text-muted-foreground text-xs">{session?.user.email}</p>
+               <h4 className="font-semibold">{user?.name}</h4>
+               <p className="text-muted-foreground text-xs">{user?.email}</p>
             </div>
          </div>
 

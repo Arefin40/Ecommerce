@@ -15,6 +15,7 @@ import {
    DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/context/session";
 
 const DropdownNavigationMenu = {
    user: [
@@ -25,7 +26,7 @@ const DropdownNavigationMenu = {
 
 function UserMenu() {
    const router = useRouter();
-   const { data: session } = authClient.useSession();
+   const { user } = useSession();
 
    const handleLogout = async () => {
       await authClient.signOut();
@@ -36,7 +37,7 @@ function UserMenu() {
       <DropdownMenu>
          <DropdownMenuTrigger className="relative outline-none">
             <Image
-               src={session?.user.image || "/images/user.png"}
+               src={user?.image || "/images/user.png"}
                width="40"
                height="40"
                alt="Profile Picture"
@@ -51,8 +52,10 @@ function UserMenu() {
             <DropdownMenuLabel className="text-muted-foreground font-semibold">
                My Account
             </DropdownMenuLabel>
+            <DropdownMenuLabel className="mt-0 pt-0">{user?.name}</DropdownMenuLabel>
+
             <DropdownMenuSeparator />
-            {session?.user ? (
+            {user ? (
                <>
                   {DropdownNavigationMenu.user.map((menu) => (
                      <DropdownMenuItem key={menu.href} asChild>

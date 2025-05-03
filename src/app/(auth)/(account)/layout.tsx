@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Mulish as FontSans } from "next/font/google";
+import { AuthSessionProvider } from "@/context/session";
+import { QueryClientProvider } from "@/context/react-query";
 import { Toaster } from "react-hot-toast";
 import { ReactLenis } from "@/lib/lenis";
 import Image from "next/image";
@@ -25,42 +27,46 @@ export default function RootLayout({
    children: React.ReactNode;
 }>) {
    return (
-      <ReactLenis root options={{ duration: 0.1 }}>
-         <html lang="en">
-            <body
-               className={`${fontSans.variable} relative grid min-h-screen font-sans antialiased md:gap-y-6 lg:grid-cols-2`}
-            >
-               <Toaster />
+      <AuthSessionProvider>
+         <QueryClientProvider>
+            <ReactLenis root options={{ duration: 0.1 }}>
+               <html lang="en">
+                  <body
+                     className={`${fontSans.variable} relative grid min-h-screen font-sans antialiased md:gap-y-6 lg:grid-cols-2`}
+                  >
+                     <Toaster />
 
-               <div className="flex flex-col gap-y-8 p-4 sm:p-6">
-                  <header>
-                     <Link href="/" className="flex items-center gap-x-2">
-                        <Image
-                           src="/images/Logo.svg"
-                           alt="Logo"
-                           width={105}
-                           height={20}
-                           className="h-5"
-                        />
-                     </Link>
-                  </header>
+                     <div className="flex flex-col gap-y-8 p-4 sm:p-6">
+                        <header>
+                           <Link href="/" className="flex items-center gap-x-2">
+                              <Image
+                                 src="/images/Logo.svg"
+                                 alt="Logo"
+                                 width={105}
+                                 height={20}
+                                 className="h-5"
+                              />
+                           </Link>
+                        </header>
 
-                  {children}
-               </div>
+                        {children}
+                     </div>
 
-               <aside className="flex items-center justify-center p-4 sm:p-6 lg:p-12">
-                  <div className="relative aspect-square grow">
-                     <Image
-                        fill
-                        sizes="100%"
-                        src="/images/AuthBG.jpg"
-                        alt="Login"
-                        className="transform object-contain"
-                     />
-                  </div>
-               </aside>
-            </body>
-         </html>
-      </ReactLenis>
+                     <aside className="flex items-center justify-center p-4 sm:p-6 lg:p-12">
+                        <div className="relative aspect-square grow">
+                           <Image
+                              fill
+                              sizes="100%"
+                              src="/images/AuthBG.jpg"
+                              alt="Login"
+                              className="transform object-contain"
+                           />
+                        </div>
+                     </aside>
+                  </body>
+               </html>
+            </ReactLenis>
+         </QueryClientProvider>
+      </AuthSessionProvider>
    );
 }

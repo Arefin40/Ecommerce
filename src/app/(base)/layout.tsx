@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Mulish as FontSans } from "next/font/google";
+import { AuthSessionProvider } from "@/context/session";
+import { QueryClientProvider } from "@/context/react-query";
 import { Toaster } from "react-hot-toast";
 import "../globals.css";
 
@@ -22,13 +24,17 @@ export default function RootLayout({
    children: React.ReactNode;
 }>) {
    return (
-      <html lang="en">
-         <body
-            className={`${fontSans.variable} relative h-screen bg-gray-50 font-sans font-medium antialiased`}
-         >
-            <Toaster />
-            {children}
-         </body>
-      </html>
+      <AuthSessionProvider>
+         <QueryClientProvider>
+            <html lang="en">
+               <body
+                  className={`${fontSans.variable} relative h-screen bg-gray-50 font-sans font-medium antialiased`}
+               >
+                  <Toaster />
+                  {children}
+               </body>
+            </html>
+         </QueryClientProvider>
+      </AuthSessionProvider>
    );
 }

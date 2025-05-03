@@ -11,6 +11,7 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CurlyUnderline, UserPassword } from "@/icons";
+import { useSession } from "@/context/session";
 
 const schema = z.object({
    email: z.string().email("Invalid email address")
@@ -19,22 +20,18 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function ResetPasswordPage() {
-   const { data: session } = authClient.useSession();
+   const { user } = useSession();
 
    const {
       register,
       handleSubmit,
       setValue,
       formState: { errors }
-   } = useForm<FormData>({
-      resolver: zodResolver(schema)
-   });
+   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
    React.useEffect(() => {
-      if (session?.user.email) {
-         setValue("email", session?.user.email);
-      }
-   }, [session, setValue]);
+      if (user?.email) setValue("email", user?.email);
+   }, [user, setValue]);
 
    const onSubmit = async ({ email }: FormData) => {
       await authClient.forgetPassword(

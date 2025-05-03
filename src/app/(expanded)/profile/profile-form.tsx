@@ -1,17 +1,17 @@
 "use client";
 
+import { z } from "zod";
 import React from "react";
 import Image from "next/image";
-import { z } from "zod";
+import toast from "react-hot-toast";
 import { Input, Label } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { updateProfileSchema } from "@/lib/auth-schema";
 import { uploadImagesToCloudinary } from "@/actions/image-upload";
 import { updateProfile } from "@/actions/update-profile";
-import toast from "react-hot-toast";
+import { useSession } from "@/context/session";
 
 type FormFields = z.infer<typeof updateProfileSchema>;
 
@@ -22,7 +22,7 @@ interface updatedDataType {
 }
 
 function ProfileForm() {
-   const { data: session } = authClient.useSession();
+   const { user } = useSession();
 
    const {
       register,
@@ -36,8 +36,8 @@ function ProfileForm() {
       const updatedData: updatedDataType = {};
 
       // find out the changes
-      if (name && name !== session?.user.name) updatedData.name = name;
-      if (email && email !== session?.user.email) updatedData.email = email;
+      if (name && name !== user?.name) updatedData.name = name;
+      if (email && email !== user?.email) updatedData.email = email;
       if (image) {
          const formData = new FormData();
          formData.append("image", image);
@@ -51,11 +51,11 @@ function ProfileForm() {
          }
       }
 
-      if (!session?.user.id) return;
+      if (!user?.id) return;
 
       try {
          const result = await updateProfile({
-            id: session.user.id,
+            id: user?.id,
             ...updatedData
          });
 
@@ -76,11 +76,11 @@ function ProfileForm() {
 
    // Update default values when session data is available
    React.useEffect(() => {
-      if (session?.user) {
-         setValue("name", session.user.name);
-         setValue("email", session.user.email);
+      if (user) {
+         setValue("name", user.name);
+         setValue("email", user.email);
       }
-   }, [session, setValue]);
+   }, [user, setValue]);
 
    // Cleanup object URL to prevent memory leaks
    React.useEffect(() => {
@@ -118,7 +118,7 @@ function ProfileForm() {
                   <div className="relative">
                      <Image
                         priority
-                        src={previewImage || session?.user.image || "/images/user.png"}
+                        src={previewImage || user?.image || "/images/user.png"}
                         alt="Profile picture"
                         width="144"
                         height="144"

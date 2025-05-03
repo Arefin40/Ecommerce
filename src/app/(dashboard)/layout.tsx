@@ -2,16 +2,18 @@ import "../globals.css";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Toaster } from "react-hot-toast";
-import { Mulish as FontSans } from "next/font/google";
-import { PanelLeft } from "lucide-react";
-import { DashboardBlocks } from "@/icons";
-import { DashboardMenuItems } from "@/lib/data/dashboard";
-import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import type { Metadata } from "next";
+import { PanelLeft } from "lucide-react";
+import { Toaster } from "react-hot-toast";
+import { DashboardBlocks } from "@/icons";
+import { redirect } from "next/navigation";
+import { Mulish as FontSans } from "next/font/google";
+import { DashboardMenuItems } from "@/lib/data/dashboard";
+import { AuthSessionProvider } from "@/context/session";
+import { QueryClientProvider } from "@/context/react-query";
 import UserDropdown from "./UserDropdown";
+import type { Metadata } from "next";
 
 const fontSans = FontSans({
    variable: "--font-sans",
@@ -38,57 +40,65 @@ export default async function RootLayout({
    if (!(role === "admin" || role === "merchant")) redirect("/login");
 
    return (
-      <html lang="en">
-         <body
-            className={`${fontSans.variable} bg-background relative grid h-screen grid-cols-[18rem_1fr] font-sans font-medium antialiased`}
-         >
-            <Toaster />
+      <AuthSessionProvider>
+         <QueryClientProvider>
+            <html lang="en">
+               <body
+                  className={`${fontSans.variable} bg-background relative grid h-screen grid-cols-[18rem_1fr] font-sans font-medium antialiased`}
+               >
+                  <Toaster />
 
-            <aside className="border-border flex h-full flex-col border-r bg-white">
-               <div className="px-6">
-                  <div className="border-border flex h-16 items-center justify-between border-b">
-                     <Link href="/" className="flex items-center gap-x-2">
-                        <Image
-                           priority
-                           src="/images/Logo.svg"
-                           alt="Logo"
-                           width={105}
-                           height={20}
-                           className="h-5"
-                        />
-                     </Link>
+                  <aside className="border-border flex h-full flex-col border-r bg-white">
+                     <div className="px-6">
+                        <div className="border-border flex h-16 items-center justify-between border-b">
+                           <Link href="/" className="flex items-center gap-x-2">
+                              <Image
+                                 priority
+                                 src="/images/Logo.svg"
+                                 alt="Logo"
+                                 width={105}
+                                 height={20}
+                                 className="h-5"
+                              />
+                           </Link>
 
-                     <button>
-                        <PanelLeft
-                           size={20}
-                           strokeWidth={1.5}
-                           className="text-muted-foreground hover:text-foreground"
-                        />
-                     </button>
-                  </div>
-               </div>
+                           <button>
+                              <PanelLeft
+                                 size={20}
+                                 strokeWidth={1.5}
+                                 className="text-muted-foreground hover:text-foreground"
+                              />
+                           </button>
+                        </div>
+                     </div>
 
-               <div className="flex flex-1 flex-col py-4">
-                  <ul className="flex flex-col space-y-2">
-                     <DashboardMenuItem active href="/dashboard" icon={<DashboardBlocks />}>
-                        Dashboard
-                     </DashboardMenuItem>
-                     {DashboardMenuItems[role].map((item) => (
-                        <DashboardMenuItem key={item.name} href={item.href} icon={<item.icon />}>
-                           {item.name}
-                        </DashboardMenuItem>
-                     ))}
-                  </ul>
-               </div>
+                     <div className="flex flex-1 flex-col py-4">
+                        <ul className="flex flex-col space-y-2">
+                           <DashboardMenuItem active href="/dashboard" icon={<DashboardBlocks />}>
+                              Dashboard
+                           </DashboardMenuItem>
+                           {DashboardMenuItems[role].map((item) => (
+                              <DashboardMenuItem
+                                 key={item.name}
+                                 href={item.href}
+                                 icon={<item.icon />}
+                              >
+                                 {item.name}
+                              </DashboardMenuItem>
+                           ))}
+                        </ul>
+                     </div>
 
-               <div className="px-6">
-                  <UserDropdown />
-               </div>
-            </aside>
+                     <div className="px-6">
+                        <UserDropdown />
+                     </div>
+                  </aside>
 
-            {children}
-         </body>
-      </html>
+                  {children}
+               </body>
+            </html>
+         </QueryClientProvider>
+      </AuthSessionProvider>
    );
 }
 
