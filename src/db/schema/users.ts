@@ -1,16 +1,5 @@
-import {
-   pgTable,
-   pgEnum,
-   text,
-   uuid,
-   serial,
-   uniqueIndex,
-   timestamp,
-   boolean
-} from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, serial, uniqueIndex, timestamp, boolean } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
-
-export const userRoleEnum = pgEnum("user_role", ["user", "merchant", "admin"]);
 
 export const user = pgTable(
    "user",
@@ -25,10 +14,13 @@ export const user = pgTable(
          .notNull()
          .defaultNow()
          .$onUpdate(() => new Date()),
-      role: userRoleEnum("role").notNull().default("user")
+      role: text("role", { enum: ["user", "merchant", "admin"] })
+         .notNull()
+         .default("user")
    },
    (t) => [uniqueIndex("email_index").on(t.email)]
 );
+
 export type User = typeof user.$inferInsert;
 
 export const address = pgTable(
@@ -120,8 +112,6 @@ export const verification = pgTable("verification", {
       .$onUpdate(() => new Date())
 });
 
-export const statusEnum = pgEnum("status", ["pending", "approved", "rejected"]);
-
 export const merchant_application = pgTable("merchant_application", {
    id: uuid("id")
       .primaryKey()
@@ -133,6 +123,8 @@ export const merchant_application = pgTable("merchant_application", {
    nid: text("nid").notNull(),
    mobile: text("mobile").notNull(),
    comment: text("comment"),
-   status: statusEnum("status").notNull().default("pending"),
+   status: text("application_status", { enum: ["pending", "approved", "rejected"] })
+      .notNull()
+      .default("pending"),
    createdAt: timestamp("created_at").notNull().defaultNow()
 });
