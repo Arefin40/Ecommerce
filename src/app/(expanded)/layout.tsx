@@ -3,7 +3,7 @@ import { Mulish as FontSans } from "next/font/google";
 import { AuthSessionProvider } from "@/context/session";
 import { QueryClientProvider } from "@/context/react-query";
 import { Toaster } from "react-hot-toast";
-import Header from "../Header";
+import Header from "@/components/Header";
 import "../globals.css";
 
 const fontSans = FontSans({
@@ -29,7 +29,7 @@ export default function RootLayout({
          <QueryClientProvider>
             <html lang="en">
                <body
-                  className={`${fontSans.variable} relative h-screen bg-gray-50 font-sans font-medium antialiased`}
+                  className={`${fontSans.variable} relative h-screen overflow-hidden bg-gray-50 font-sans font-medium antialiased`}
                >
                   <Toaster />
                   <Header />

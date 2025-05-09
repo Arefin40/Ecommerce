@@ -15,7 +15,7 @@ export default async function Home() {
       <main className="box-container grid size-full h-screen grid-cols-[18rem_1fr_18rem] gap-4 pt-20">
          <aside className="rounded-xl bg-white p-6">Left Sidebar</aside>
 
-         <main className="scrollbar-hide space-y-6 overflow-y-auto rounded-xl bg-white p-6">
+         <main className="scroll-hide space-y-6 overflow-y-auto rounded-xl bg-white p-6">
             {posts.data?.map((post) => (
                <div key={post.id} className="rounded-lg border border-gray-100 bg-white">
                   {/* Post Header */}

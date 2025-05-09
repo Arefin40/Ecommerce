@@ -34,7 +34,7 @@ export default async function RootLayout({
    children: React.ReactNode;
 }>) {
    const session = await auth.api.getSession({ headers: await headers() });
-   if (!session?.user) redirect("/admin");
+   if (!session?.user) redirect("/login");
 
    const role = session.user.role as keyof typeof DashboardMenuItems;
    if (!(role === "admin" || role === "merchant")) redirect("/login");

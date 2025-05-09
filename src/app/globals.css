@@ -114,6 +114,19 @@
    --color-sidebar-ring: var(--sidebar-ring);
    --shadow-card: 0 0 12px 4px rgba(0, 0, 0, 0.05);
    --breakpoint-3xl: 87.5rem;
+   --animate-scaleIn: scale-in 100ms ease-out;
+
+   @keyframes scale-in {
+      0% {
+         transform: scale(1);
+      }
+      20% {
+         transform: scale(1.5);
+      }
+      100% {
+         transform: scale(1);
+      }
+   }
 }
 
 @layer base {
@@ -134,7 +147,7 @@
       @apply flex items-center justify-center;
    }
 
-   scroll-hide {
+   .scroll-hide {
       @apply [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden;
    }
 
