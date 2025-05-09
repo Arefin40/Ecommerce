@@ -13,6 +13,7 @@ export interface InputProps extends InputBaseProps {
    labelClass?: string;
    description?: string;
    descriptionClass?: string;
+   baseClassName?: string;
    error?: FieldError;
 }
 
@@ -22,6 +23,7 @@ export function Input({
    labelClass,
    description,
    descriptionClass,
+   baseClassName,
    error,
    className,
    ...props
@@ -34,7 +36,7 @@ export function Input({
             </Label>
          )}
 
-         <InputBase name={name} {...props} />
+         <InputBase name={name} className={baseClassName} {...props} />
 
          {description && <p className={cn("text-muted-foreground text-sm", descriptionClass)} />}
 
@@ -54,6 +56,7 @@ export function InputPassword({
    labelClass,
    description,
    descriptionClass,
+   baseClassName,
    error,
    className,
    forgotPasswordUrl,
@@ -99,6 +102,7 @@ export function InputPassword({
                   )}
                </button>
             }
+            className={baseClassName}
          />
 
          {description && <p className={cn("text-muted-foreground text-sm", descriptionClass)} />}

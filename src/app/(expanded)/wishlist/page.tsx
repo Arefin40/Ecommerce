@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
-import { clearWishlist, getWishlistItems, toggleWishlistItem } from "@/actions/checkout";
+import { clearWishlist, getWishlistItems, toggleWishlistItem } from "@/actions/wishlist";
 
 interface WishlistItem {
    user: string;
