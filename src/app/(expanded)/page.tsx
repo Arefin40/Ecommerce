@@ -12,7 +12,7 @@ export default async function Home() {
    const linkedPosts = await getLinkedPost();
 
    return (
-      <main className="box-container grid size-full h-screen grid-cols-[18rem_1fr_18rem] gap-4 pt-20">
+      <main className="box-container grid size-full h-screen grid-cols-[20rem_1fr_24rem] gap-4 pt-20">
          <aside className="rounded-xl bg-white p-6">Left Sidebar</aside>
 
          <main className="scroll-hide space-y-6 overflow-y-auto rounded-xl bg-white p-6">
@@ -44,12 +44,12 @@ export default async function Home() {
 
                   {/* Post Content */}
                   <main>
-                     <div className="text-foreground space-y-2.5 px-6 py-3 text-sm">
+                     <div className="text-foreground space-y-2.5 px-6 py-3 text-sm whitespace-pre-wrap">
                         {post.content}
                      </div>
                      {post.products.length > 0 && (
                         <div
-                           className={`grid max-h-[25rem] w-full gap-0.5 ${
+                           className={`grid w-full gap-0.5 ${
                               post.products.length === 3
                                  ? "grid-cols-[2fr,1fr] grid-rows-[repeat(2,200px)]"
                                  : post.products.length === 2
@@ -61,15 +61,16 @@ export default async function Home() {
                               <Link
                                  key={index}
                                  href={`/products/${product?.id}/details`}
-                                 className={`block h-full max-h-[25rem] w-full ${
+                                 className={`relative block aspect-square h-full w-full overflow-hidden ${
                                     post.products.length === 3 && index === 0 ? "row-span-2" : ""
                                  }`}
                               >
                                  <Image
+                                    fill
+                                    priority
                                     src={product.image ?? ""}
                                     alt={`Product ${index + 1}`}
-                                    width={400}
-                                    height={200}
+                                    sizes="100vw"
                                     className="h-full w-full object-cover object-top"
                                  />
                               </Link>

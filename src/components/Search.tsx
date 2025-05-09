@@ -28,7 +28,7 @@ function SuggestedListItem({ children, type, id, image }: SuggestedListItemProps
                   height={40}
                   width={40}
                   aria-hidden="true"
-                  className="size-8 overflow-hidden rounded-full"
+                  className="size-8 overflow-hidden rounded-full object-cover object-top"
                />
             )}
 

@@ -51,7 +51,7 @@ export default async function RootLayout({
                   <aside className="border-border flex h-full flex-col border-r bg-white">
                      <div className="px-6">
                         <div className="border-border flex h-16 items-center justify-between border-b">
-                           <Link href="/" className="flex items-center gap-x-2">
+                           <Link href="/dashboard" className="flex items-center gap-x-2">
                               <Image
                                  priority
                                  src="/images/Logo.svg"

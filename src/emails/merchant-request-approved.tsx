@@ -91,7 +91,7 @@ export const MerchantRequestApprovedEmail = ({ name }: EmailProps) => {
                         <Heading as="h4">Next Steps:</Heading>
                         <Text>
                            ✅ Log in to your account:{" "}
-                           <Link href={`${baseUrl}/stores/create`}>Go to Dashboard</Link>
+                           <Link href={`${baseUrl}/merchant`}>Go to Dashboard</Link>
                            <br />✅ Set up your store details
                            <br />✅ Start adding products and selling 🚀
                         </Text>

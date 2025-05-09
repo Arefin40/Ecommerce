@@ -45,4 +45,14 @@ declare global {
       gatewayPageURL: string;
       paymentGateways: GroupPaymentGateway | null;
    }
+
+   type OrderStatus =
+      | "pending"
+      | "confirmed"
+      | "processing"
+      | "shipped"
+      | "out_for_delivery"
+      | "delivered"
+      | "cancelled"
+      | "returned";
 }

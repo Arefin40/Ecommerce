@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { cart, cartItem } from "@/db/schema/cart";
@@ -9,6 +9,7 @@ import { revalidatePath } from "next/cache";
 import { product } from "@/db/schema/product";
 import { order, orderItem } from "@/db/schema/checkout";
 import { CheckoutFormValues } from "@/lib/validation/checkout";
+import { store } from "@/db/schema/store";
 
 export async function createOrder(data: CheckoutFormValues) {
    "use server";
@@ -90,7 +91,7 @@ export async function getOrders() {
          .select()
          .from(order)
          .where(eq(order.user, session.user.id))
-         .orderBy(order.orderedAt);
+         .orderBy(desc(order.orderedAt));
 
       const ordersWithItems = await Promise.all(
          orders.map(async (order) => {
@@ -104,6 +105,84 @@ export async function getOrders() {
    } catch (error) {
       console.error("Error getting orders:", error);
       return { success: false, error: "Failed to get orders" };
+   }
+}
+
+export async function getAllOrders() {
+   "use server";
+   try {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      const orders = await db.select().from(order).orderBy(desc(order.orderedAt));
+
+      const ordersWithItems = await Promise.all(
+         orders.map(async (order) => {
+            const items = await db.select().from(orderItem).where(eq(orderItem.order, order.id));
+            const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+            return { ...order, totalItems, items };
+         })
+      );
+
+      return { success: true, data: ordersWithItems };
+   } catch (error) {
+      console.error("Error getting orders:", error);
+      return { success: false, error: "Failed to get orders" };
+   }
+}
+
+export async function getReceivedOrders() {
+   "use server";
+   try {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      const stores = await db
+         .select()
+         .from(store)
+         .where(eq(store.merchant, session.user.id))
+         .limit(1);
+      if (!stores.length) return { success: false, error: "No store found" };
+
+      const [userStore] = stores;
+
+      const orders = await db.select().from(order).orderBy(desc(order.orderedAt));
+      const merchantOrders = await Promise.all(
+         orders.map(async (order) => {
+            let items = await db
+               .select({
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                  quantity: orderItem.quantity,
+                  soldBy: product.storeId
+               })
+               .from(orderItem)
+               .where(eq(orderItem.order, order.id))
+               .leftJoin(product, eq(orderItem.product, product.id));
+
+            items = items.filter((item) => item.soldBy === userStore.id);
+            if (items.length === 0) return null;
+
+            const { totalItems, totalPrice } = items.reduce(
+               (acc, item) => ({
+                  totalItems: acc.totalItems + item.quantity,
+                  totalPrice: acc.totalPrice + (item.price ?? 0) * item.quantity
+               }),
+               { totalItems: 0, totalPrice: 0 }
+            );
+
+            return { ...order, totalItems, totalPrice, items };
+         })
+      );
+
+      // Filter out null values (orders that don't belong to this merchant)
+      const filteredOrders = merchantOrders.filter(Boolean);
+
+      return { success: true, data: filteredOrders };
+   } catch (error) {
+      console.error("Error getting received orders:", error);
+      return { success: false, error: "Failed to get received orders" };
    }
 }
 
@@ -137,5 +216,41 @@ export async function getOrderDetails(orderId: string) {
    } catch (error) {
       console.error("Error getting order details:", error);
       return { success: false, error: "Failed to get order details" };
+   }
+}
+
+export async function updateOrderStatus(
+   orderId: string,
+   status: Exclude<OrderStatus, "pending">,
+   invalidatePath = "/manage-orders"
+) {
+   "use server";
+   try {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      if (session.user.role !== "admin") {
+         throw new Error("Unauthorized: Only admins can update order status");
+      }
+
+      const statusMap: Record<Exclude<OrderStatus, "pending">, string> = {
+         confirmed: "confirmedAt",
+         processing: "fulfilledAt",
+         shipped: "shippedAt",
+         out_for_delivery: "outForDeliveryAt",
+         delivered: "deliveredAt",
+         cancelled: "cancelledAt",
+         returned: "returnedAt"
+      };
+
+      await db
+         .update(order)
+         .set({ status, [statusMap[status]]: new Date() })
+         .where(eq(order.id, orderId));
+      revalidatePath(invalidatePath);
+      return { success: true };
+   } catch (error) {
+      console.error("Error updating order status:", error);
+      return { success: false, error: "Failed to update order status" };
    }
 }

@@ -178,7 +178,7 @@ export default function AddProduct() {
                               fill
                               src={previewImage}
                               alt="Product preview"
-                              className="border-border border object-cover"
+                              className="border-border border object-cover object-top"
                            />
                         ) : (
                            <div className="flex h-full items-center justify-center text-gray-400">
@@ -197,7 +197,7 @@ export default function AddProduct() {
                                  fill
                                  src={image}
                                  alt={`Additional image ${index + 1}`}
-                                 className="border-border border object-cover"
+                                 className="border-border border object-cover object-top"
                               />
                            </div>
                         ))}

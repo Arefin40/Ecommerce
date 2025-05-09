@@ -81,7 +81,7 @@ export async function getMyStoreProducts() {
 
       // get products
       const products = await db
-         .select({ id: product.id, name: product.name, image: product.image })
+         .select()
          .from(product)
          .where(eq(product.storeId, _store[0].id))
          .orderBy(desc(product.createdAt));

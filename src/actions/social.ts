@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { store } from "@/db/schema/store";
@@ -57,7 +57,8 @@ export async function getAllPosts() {
             store: { name: store.name, slug: store.slug, logo: store.logo }
          })
          .from(post)
-         .leftJoin(store, eq(post.store, store.id));
+         .leftJoin(store, eq(post.store, store.id))
+         .orderBy(desc(post.createdAt));
 
       const postsWithProducts = await Promise.all(
          _posts.map(async (post) => {
@@ -188,7 +189,11 @@ export async function getPostsMyStorePosts() {
       if (_store.length === 0) throw new Error("Store not found");
 
       // Get the posts of the store
-      const _posts = await db.select().from(post).where(eq(post.store, _store[0].id));
+      const _posts = await db
+         .select()
+         .from(post)
+         .where(eq(post.store, _store[0].id))
+         .orderBy(desc(post.createdAt));
 
       // Get the products of the posts
       const postsWithProducts = await Promise.all(

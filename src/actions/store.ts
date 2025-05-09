@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { store, store_followers } from "@/db/schema/store";
 import { revalidatePath } from "next/cache";
 import { type StoreFormValues } from "@/lib/validation/merchant";
+import { product } from "@/db/schema/product";
 
 export async function createStore(data: StoreFormValues) {
    "use server";
@@ -49,7 +50,28 @@ export async function getFollowedStores() {
 
 export async function getStore(slug: string) {
    "use server";
-   return await db.select().from(store).where(eq(store.slug, slug));
+   const storeData = await db.select().from(store).where(eq(store.slug, slug));
+   if (!storeData.length) return { success: false, error: "Store not found" };
+
+   const [storeInfo] = storeData;
+   const products = await db.select().from(product).where(eq(product.storeId, storeInfo.id));
+
+   return {
+      success: true,
+      data: { ...storeInfo, products }
+   };
+}
+
+export async function getMyStore() {
+   "use server";
+   const session = await auth.api.getSession({ headers: await headers() });
+   if (!session?.user || session.user.role !== "merchant") return null;
+
+   const storeData = await db.select().from(store).where(eq(store.merchant, session.user.id));
+   if (!storeData.length) return null;
+
+   const [storeInfo] = storeData;
+   return storeInfo;
 }
 
 export async function toggleFollowStore(storeId: string, invalidatePath: string) {

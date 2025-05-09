@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Pencil } from "lucide-react";
-import { getAllProducts } from "@/actions/products";
+import { getMyStoreProducts } from "@/actions/products";
 import DashboardContainer from "@/components/DashboardContainer";
 import DeleteProductButton from "./DeleteProductButton";
 
 export default async function ManageInventory() {
-   const products = await getAllProducts();
+   const { data: products = [] } = await getMyStoreProducts();
 
    return (
       <DashboardContainer
