@@ -5,11 +5,12 @@ import toast from "react-hot-toast";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
-import { addToCart, toggleWishlistItem } from "@/actions/checkout";
+import { addToCart } from "@/actions/cart";
+import { toggleWishlistItem } from "@/actions/wishlist";
 
 function DetailsActionButtons({ productId }: { productId: string }) {
    const handleAddToCart = async () => {
-      const response = await addToCart(productId, 1);
+      const response = await addToCart(productId);
       if (response.success) {
          toast.success(response.message ?? "Product added to cart");
       }

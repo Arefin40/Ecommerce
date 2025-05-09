@@ -4,8 +4,8 @@ import React from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart } from "lucide-react";
-
-import { toggleWishlistItem, addToCart } from "@/actions/checkout";
+import { addToCart } from "@/actions/cart";
+import { toggleWishlistItem } from "@/actions/wishlist";
 
 export function WishlistButton({ productId }: { productId: string }) {
    const toggleWishlist = async () => {

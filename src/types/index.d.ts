@@ -17,6 +17,12 @@ declare global {
       filled?: boolean;
    }
 
+   type Area = {
+      id: number;
+      name: string;
+      zone: number;
+   };
+
    type User = {
       id: string;
       name: string;
@@ -27,4 +33,16 @@ declare global {
       image?: string | null | undefined | undefined;
       role: string;
    };
+
+   type PaymentGateway = Record<
+      "name" | "type" | "logo" | "gw" | "r_flag" | "redirectGatewayURL",
+      string
+   >;
+
+   type GroupPaymentGateway = Record<string, PaymentGateway[]>;
+
+   interface PaymentGatewayResponse {
+      gatewayPageURL: string;
+      paymentGateways: GroupPaymentGateway | null;
+   }
 }
