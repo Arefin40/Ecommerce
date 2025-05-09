@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { type AddressFormData, addressSchema } from "@/lib/validation/address";
 
-export async function fetchAllZones() {
+export async function getAllZones() {
    "use server";
    try {
       return await db.select().from(zone);
@@ -18,15 +18,10 @@ export async function fetchAllZones() {
    }
 }
 
-export async function fetchAreasByZone(zoneId: number | string) {
+export async function getAllAreas() {
    "use server";
-   if (typeof zoneId === "string") zoneId = parseInt(zoneId);
    try {
-      const areas = await db.select().from(area).where(eq(area.zone, zoneId));
-      return areas.map((area) => ({
-         value: area.id.toString(),
-         label: area.name
-      }));
+      return await db.select().from(area);
    } catch (error) {
       console.error("Error fetching areas:", error);
       return [];

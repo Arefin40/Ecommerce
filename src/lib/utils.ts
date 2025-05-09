@@ -61,3 +61,18 @@ export const getImagesSchema = (maxSize: number = 2 * 1024 * 1024, isRequired = 
          "Only .jpg, .jpeg, .png and .webp formats are supported"
       );
 };
+
+export const createOptions = (items: Area[]): Option[] => {
+   return items.map((item) => ({
+      value: item.id.toString(),
+      label: item.name
+   }));
+};
+
+export const formatDate = (date: Date) => {
+   return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+   });
+};

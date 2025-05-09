@@ -18,8 +18,9 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle, Plus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input, InputAutoComplete } from "@/components/ui/form";
-import { fetchAreasByZone, createAddress, updateAddress } from "@/actions/address";
+import { createAddress, updateAddress, getAllAreas } from "@/actions/address";
 import { addressSchema, type AddressFormData } from "@/lib/validation/address";
+import { createOptions } from "@/lib/utils";
 
 interface AddressFormProps {
    address?: Address;
@@ -43,10 +44,18 @@ function AddressForm({ address, onSuccess }: AddressFormProps) {
    const { errors, isSubmitting } = formState;
    const [areas, setAreas] = React.useState<Option[]>([]);
 
-   const handleZoneChange = async (zone: Option) => {
-      setValue("zone", zone.value);
-      const fetchedAreas = await fetchAreasByZone(zone.value);
-      setAreas(fetchedAreas);
+   React.useEffect(() => {
+      const fetchAllAreas = async () => {
+         const areas = await getAllAreas();
+         setAreas(createOptions(areas));
+      };
+      fetchAllAreas();
+   }, []);
+
+   const setZone = async (value: string) => {
+      setValue("zone", value);
+      const areas = await getAllAreas();
+      setAreas(createOptions(areas));
    };
 
    const onSubmit = async (data: AddressFormData) => {
@@ -99,7 +108,7 @@ function AddressForm({ address, onSuccess }: AddressFormProps) {
                emptyMessage="No zone found"
                autoComplete="address-level1"
                placeholder="Select your city"
-               onValueChange={handleZoneChange}
+               onValueChange={(zone) => setZone(zone.value)}
                {...register("zone")}
             />
 
