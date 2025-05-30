@@ -21,7 +21,7 @@ export default async function ManageInventory() {
             </Link>
          }
       >
-         <div className="border-border overflow-hidden rounded-md border">
+         <div className="border-border rounded-md border">
             <table className="min-w-full border-collapse bg-white">
                <thead className="bg-accent">
                   <tr>

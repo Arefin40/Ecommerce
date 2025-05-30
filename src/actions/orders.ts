@@ -39,7 +39,7 @@ export async function createOrder(data: CheckoutFormValues) {
             billingZone: data.billing_zone,
             billingArea: data.billing_area,
             shippingMethod: data.delivery_method,
-            totalPrice: userCart[0].totalPrice
+            totalPrice: String(Number(userCart[0].totalPrice || "0") * 1.05) // With 5% tax
          })
          .returning();
 

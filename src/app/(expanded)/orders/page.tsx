@@ -87,7 +87,11 @@ export default async function OrdersPage() {
                            <div className="flex gap-4 pt-2">
                               <div className="flex-1 space-y-1">
                                  <p className="text-muted-foreground text-sm">Total</p>
-                                 <p className="font-medium">${order.totalPrice}</p>
+                                 <p className="font-medium">
+                                    $
+                                    {parseFloat(order.totalPrice) +
+                                       (order.shippingMethod === "EXPRESS" ? 200 : 100)}
+                                 </p>
                               </div>
                               <div className="flex-1 space-y-1">
                                  <p className="text-muted-foreground text-sm">Ship To</p>

@@ -116,7 +116,7 @@ function CheckoutContent() {
                   <div className="space-y-4">
                      <div className="flex justify-between">
                         <span>Subtotal</span>
-                        <span>৳ {cartDetails?.totalPrice}</span>
+                        <span>৳ {Number(cartDetails?.totalPrice || 0) * 1.05}</span>
                      </div>
 
                      <div className="space-y-4">
@@ -200,7 +200,8 @@ function CheckoutContent() {
                         <span>
                            ৳{" "}
                            {(
-                              parseFloat(String(cartDetails?.totalPrice || 0)) + deliveryCharge
+                              parseFloat(String(cartDetails?.totalPrice || 0)) * 1.05 +
+                              deliveryCharge
                            ).toFixed(2)}
                         </span>
                      </div>
