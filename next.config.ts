@@ -10,7 +10,12 @@ const nextConfig: NextConfig = {
          { protocol: "https", hostname: "sandbox.sslcommerz.com" }
       ]
    },
-   devIndicators: false
+   devIndicators: false,
+   experimental: {
+      serverActions: {
+         bodySizeLimit: "2mb"
+      }
+   }
 };
 
 export default nextConfig;

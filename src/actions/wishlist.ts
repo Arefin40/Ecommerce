@@ -8,6 +8,8 @@ import { revalidatePath } from "next/cache";
 import { wishlist } from "@/db/schema/social";
 import { product } from "@/db/schema/product";
 
+type wishlistItem = { id: string; name: string; price: number; image: string };
+
 export async function getWishlistItems() {
    "use server";
    try {
@@ -16,19 +18,16 @@ export async function getWishlistItems() {
 
       const wishlistItems = await db
          .select({
-            user: wishlist.user,
-            product: {
-               id: product.id,
-               name: product.name,
-               price: product.price,
-               image: product.image
-            }
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image
          })
          .from(wishlist)
          .where(eq(wishlist.user, session.user.id))
          .leftJoin(product, eq(wishlist.product, product.id));
 
-      return { success: true, data: wishlistItems };
+      return { success: true, data: wishlistItems as wishlistItem[] };
    } catch (error) {
       console.error("Error getting wishlist items:", error);
       return { success: false, error: "Failed to get wishlist items" };
@@ -53,16 +52,15 @@ export async function toggleWishlistItem(productId: string, invalidatePath = "/w
          await db
             .delete(wishlist)
             .where(and(eq(wishlist.user, session.user.id), eq(wishlist.product, productId)));
-      } else {
-         // Add to wishlist
-         await db.insert(wishlist).values({
-            user: session.user.id,
-            product: productId
-         });
+
+         revalidatePath(invalidatePath);
+         return { success: true, message: "Wishlist updated", action: "removed" };
       }
 
+      // Add to wishlist
+      await db.insert(wishlist).values({ user: session.user.id, product: productId });
       revalidatePath(invalidatePath);
-      return { success: true, message: "Wishlist updated" };
+      return { success: true, message: "Wishlist updated", action: "added" };
    } catch (error) {
       console.error("Error toggling wishlist item:", error);
       return { success: false, error: "Failed to update wishlist" };
