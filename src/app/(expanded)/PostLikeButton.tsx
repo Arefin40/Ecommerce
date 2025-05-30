@@ -1,27 +1,49 @@
 "use client";
 
 import React from "react";
+import { Heart } from "@/icons";
+import { cn } from "@/lib/utils";
 import { toggleLikePost } from "@/actions/social";
-import { Heart } from "lucide-react";
 
 interface PostLikeButtonProps {
    postId: string;
    isLiked: boolean;
+   totalLikes?: number;
 }
 
-function PostLikeButton({ postId, isLiked = false }: PostLikeButtonProps) {
-   const toggleLike = async (postId: string) => {
-      await toggleLikePost(postId);
+function PostLikeButton({ postId, totalLikes = 0, isLiked = false }: PostLikeButtonProps) {
+   const [likeState, setLikeState] = React.useState({ isLiked, count: totalLikes });
+
+   const handlePostLike = async () => {
+      const currentState = likeState;
+      setLikeState((prev) => ({
+         isLiked: !prev.isLiked,
+         count: prev.isLiked ? prev.count - 1 : prev.count + 1
+      }));
+
+      const response = await toggleLikePost(postId);
+      if (!response.success) {
+         setLikeState(currentState);
+      }
    };
 
    return (
-      <button onClick={() => toggleLike(postId)} className="transition-transform active:scale-125">
-         {isLiked ? (
-            <Heart className="h-5 w-5 fill-rose-400 text-rose-400" />
-         ) : (
-            <Heart className="h-5 w-5 text-gray-500" />
-         )}
-      </button>
+      <div className="flex items-center gap-x-2">
+         <button
+            onClick={handlePostLike}
+            className={cn("flex-center size-7 rounded-full transition-transform active:scale-125", {
+               "bg-[#F52C4B]": likeState.isLiked,
+               "bg-gray-200": !likeState.isLiked
+            })}
+         >
+            <Heart isLiked filledColor="text-white" className="size-4" />
+         </button>
+         <p>
+            {likeState.count === 0
+               ? "Be the first to like this"
+               : `${likeState.count} like${likeState.count > 1 ? "s" : ""}`}
+         </p>
+      </div>
    );
 }
 

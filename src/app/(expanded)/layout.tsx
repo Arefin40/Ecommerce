@@ -29,7 +29,7 @@ export default function RootLayout({
          <QueryClientProvider>
             <html lang="en">
                <body
-                  className={`${fontSans.variable} relative h-screen overflow-hidden bg-gray-50 font-sans font-medium antialiased`}
+                  className={`${fontSans.variable} relative h-screen overflow-hidden bg-white font-sans font-medium antialiased`}
                >
                   <Toaster />
                   <Header />

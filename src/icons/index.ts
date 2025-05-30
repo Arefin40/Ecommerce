@@ -4,6 +4,7 @@ export { default as CurlyUnderline } from "./CurlyUnderline";
 export { default as Shield } from "./Shield";
 export { default as UserPassword } from "./UserPassword";
 export { default as LogOut } from "./LogOut";
+export { default as Heart } from "./Heart";
 
 // Dashboard Icons
 export { default as DashboardBlocks } from "./DashboardBlocks";
