@@ -1,9 +1,6 @@
 import React from "react";
+import AdminDashboard from "./AdminDashboard";
 
 export default function Dashboard() {
-   return (
-      <main className="p-6">
-         <div>Dashboard</div>
-      </main>
-   );
+   return <AdminDashboard />;
 }
