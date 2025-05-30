@@ -5,7 +5,7 @@ import { store } from "@/db/schema/store";
 import { product, product_images } from "@/db/schema/product";
 import { auth } from "@/lib/auth";
 import { ProductDBValues } from "@/lib/validation/product";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 
 export async function createProduct(data: ProductDBValues) {
@@ -142,5 +142,31 @@ export async function deleteProduct(id: string) {
       return { success: true, message: "Product deleted successfully" };
    } catch {
       return { success: false, message: "Failed to delete product" };
+   }
+}
+
+export async function getRandomBestSeller() {
+   "use server";
+   try {
+      const products = await db
+         .select({
+            id: product.id,
+            name: product.name,
+            image: product.image,
+            store: {
+               slug: store.slug,
+               name: store.name,
+               logo: store.logo
+            }
+         })
+         .from(product)
+         .leftJoin(store, eq(product.storeId, store.id))
+         .orderBy(sql`RANDOM()`)
+         .limit(6);
+
+      return { success: true, data: products };
+   } catch (error) {
+      console.error("Error getting random best sellers:", error);
+      return { success: false, error: "Failed to get random products" };
    }
 }
