@@ -26,7 +26,7 @@ async function AdminDashboard() {
          className="bg-[#FDFDFD]"
          mainClassName="px-4"
       >
-         <section className="grid h-full grid-cols-[1fr_20rem] gap-4">
+         <section className="grid h-full gap-4 xl:grid-cols-[1fr_20rem]">
             <main className="space-y-4">
                <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-x-4">
@@ -92,7 +92,7 @@ async function AdminDashboard() {
                </div>
             </main>
 
-            <aside>
+            <aside className="grid grid-cols-2 gap-4 xl:grid-cols-1">
                <MonthlyUsers />
             </aside>
          </section>

@@ -55,6 +55,7 @@ export default function SignInForm() {
    return (
       <form
          method="post"
+         data-testid="signin-form"
          onSubmit={handleSubmit(onSubmit)}
          className="text-foreground flex flex-col gap-y-8 pt-3"
       >
@@ -91,7 +92,7 @@ export default function SignInForm() {
             />
          </div>
 
-         <Button color="primary" className="w-full">
+         <Button data-testid="login-button" color="primary" className="w-full">
             Sign In
          </Button>
       </form>

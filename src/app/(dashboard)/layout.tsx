@@ -44,11 +44,11 @@ export default async function RootLayout({
          <QueryClientProvider>
             <html lang="en">
                <body
-                  className={`${fontSans.variable} bg-background relative grid h-screen grid-cols-[18rem_1fr] overflow-hidden font-sans font-medium antialiased`}
+                  className={`${fontSans.variable} bg-background relative grid h-screen grid-cols-[16rem_1fr] overflow-hidden font-sans font-medium antialiased xl:grid-cols-[18rem_1fr]`}
                >
                   <Toaster />
 
-                  <aside className="border-border flex h-full flex-col border-r bg-white">
+                  <aside className="border-border flex h-full flex-col border-r bg-white text-sm xl:text-base">
                      <div className="px-6">
                         <div className="border-border flex h-16 items-center justify-between border-b">
                            <Link href="/dashboard" className="flex items-center gap-x-2">

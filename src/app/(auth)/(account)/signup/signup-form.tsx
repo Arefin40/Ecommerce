@@ -66,6 +66,7 @@ export default function SignUpForm() {
    return (
       <form
          method="post"
+         data-testid="signup-form"
          onSubmit={handleSubmit(onSubmit)}
          className="text-foreground flex flex-col gap-y-8 pt-3"
       >
@@ -123,7 +124,7 @@ export default function SignUpForm() {
             />
          </div>
 
-         <Button color="primary" className="w-full">
+         <Button color="primary" className="w-full" data-testid="signup-button">
             Create account
          </Button>
       </form>

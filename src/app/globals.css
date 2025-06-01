@@ -140,7 +140,7 @@
 
 @layer utilities {
    .box-container {
-      @apply container mx-auto px-4 sm:px-0;
+      @apply mx-auto px-4 sm:px-8 xl:container xl:px-0;
    }
 
    .flex-center {

@@ -35,7 +35,10 @@ function UserMenu() {
 
    return (
       <DropdownMenu>
-         <DropdownMenuTrigger className="relative outline-none">
+         <DropdownMenuTrigger
+            className="relative outline-none"
+            data-testid={user ? "user-menu" : null}
+         >
             <Image
                src={user?.image || "/images/user.png"}
                width="40"
@@ -52,7 +55,12 @@ function UserMenu() {
             <DropdownMenuLabel className="text-muted-foreground font-semibold">
                My Account
             </DropdownMenuLabel>
-            <DropdownMenuLabel className="mt-0 pt-0">{user?.name}</DropdownMenuLabel>
+            <DropdownMenuLabel
+               data-testid={user ? "usermenu-username" : null}
+               className="mt-0 pt-0"
+            >
+               {user?.name}
+            </DropdownMenuLabel>
 
             <DropdownMenuSeparator />
             {user ? (

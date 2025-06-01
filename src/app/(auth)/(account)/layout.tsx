@@ -52,7 +52,11 @@ export default function RootLayout({
                         {children}
                      </div>
 
-                     <aside className="flex items-center justify-center p-4 sm:p-6 lg:p-12">
+                     <aside
+                        suppressHydrationWarning
+                        data-test="auth-sidebar"
+                        className="flex items-center justify-center p-4 sm:p-6 lg:p-12"
+                     >
                         <div className="relative aspect-square grow">
                            <Image
                               fill

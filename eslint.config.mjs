@@ -16,7 +16,12 @@ const eslintConfig = [
       "next/typescript",
       "plugin:@tanstack/query/recommended"
    ),
-   eslintPluginPrettierRecommended
+   eslintPluginPrettierRecommended,
+   {
+      rules: {
+         "@typescript-eslint/no-namespace": "off"
+      }
+   }
 ];
 
 export default eslintConfig;

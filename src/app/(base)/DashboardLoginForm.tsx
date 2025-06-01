@@ -55,7 +55,11 @@ export default function DashboardLoginForm({ formType }: { formType: "merchant" 
             </div>
 
             <div className="bg-background border-border rounded-2xl border p-8 shadow-2xl">
-               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+               <form
+                  data-testid="signin-form"
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="space-y-6"
+               >
                   <Input
                      {...register("email")}
                      label="Email"
@@ -78,6 +82,7 @@ export default function DashboardLoginForm({ formType }: { formType: "merchant" 
 
                   <Button
                      type="submit"
+                     data-testid="login-button"
                      className="bg-primary hover:bg-primary w-full transform rounded-lg py-2.5 text-white transition-all duration-200 hover:scale-[1.02]"
                   >
                      Sign In

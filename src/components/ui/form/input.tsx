@@ -107,7 +107,11 @@ export function InputPassword({
 
          {description && <p className={cn("text-muted-foreground text-sm", descriptionClass)} />}
 
-         {error && <span className="text-destructive text-sm">{error.message}</span>}
+         {error && (
+            <span data-testid="error" data-error-name={name} className="text-destructive text-sm">
+               {error.message}
+            </span>
+         )}
       </div>
    );
 }
