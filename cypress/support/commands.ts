@@ -38,4 +38,17 @@ Cypress.Commands.add("login", (role: LoginRole) => {
    }
 });
 
+// Clear cart command
+Cypress.Commands.add("clearCart", () => {
+   cy.visit("/cart");
+   cy.get('[data-testid="cart-loading"]').should("not.exist");
+   cy.wait(3000);
+   cy.get("body").then(($body) => {
+      if ($body.find('[data-testid="clear-cart-button"]').length > 0) {
+         cy.get('[data-testid="clear-cart-button"]').click();
+      }
+      cy.get('[data-testid="empty-cart"]').should("be.visible");
+   });
+});
+
 export {};

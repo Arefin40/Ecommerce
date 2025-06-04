@@ -44,6 +44,7 @@ export default function CartPage() {
                      <div className="h-8 w-[1px] bg-gray-200"></div>
                      <button
                         onClick={() => clearCart()}
+                        data-testid="clear-cart-button"
                         className="hover:text-primary transition-colors"
                      >
                         Clear All
@@ -66,6 +67,7 @@ export default function CartPage() {
                   >
                      {cartData.items.map((item) => (
                         <div
+                           data-testid="cart-item"
                            key={item.product?.id}
                            className="grid grid-cols-[2fr_1fr_1fr_1fr_5rem] border-b border-gray-100 py-3 pb-6"
                         >
@@ -219,7 +221,7 @@ export default function CartPage() {
 
 function EmptyState() {
    return (
-      <section className="flex-center h-full pt-20">
+      <section data-testid="empty-cart" className="flex-center h-full pt-20">
          <div className="flex-center flex-1 flex-col">
             <EmptyCart className="mx-auto w-full max-w-md" />
             <p className="text-foreground text-center text-2xl leading-relaxed font-semibold tracking-tight">
@@ -235,7 +237,7 @@ function EmptyState() {
 
 function CartIsLoading() {
    return (
-      <main className="h-screen overflow-hidden bg-gray-100 pt-20 pb-6">
+      <main data-testid="cart-loading" className="h-screen overflow-hidden bg-gray-200 pt-20 pb-6">
          <section className="box-container grid size-full grid-cols-[1fr_18rem] gap-4">
             <section className="h-full rounded-xl bg-white p-6">
                <div className="flex h-full animate-pulse flex-col justify-between gap-y-6">
