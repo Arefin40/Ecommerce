@@ -96,7 +96,7 @@ function ProfileForm() {
          method="post"
          encType="multipart/form-data"
          onSubmit={handleSubmit(onSubmit)}
-         className="grid grid-cols-[1fr_2fr] gap-x-12 gap-y-8 rounded-xl bg-white p-6"
+         className="grid gap-x-12 gap-y-8 rounded-xl bg-white lg:grid-cols-[1fr_2fr]"
       >
          <div className="border-border space-y-1.5">
             <h2 className="text-lg font-bold">Personal Information</h2>
@@ -106,63 +106,66 @@ function ProfileForm() {
          </div>
 
          <div className="space-y-8">
-            <div className="grid items-center justify-between gap-x-5 gap-y-4">
-               <div className="space-y-2">
-                  <Label htmlFor="image">Profile Photo</Label>
-                  <p className="text-muted-foreground text-sm">
-                     Upload a photo to personalize your profile. Supported formats: PNG, JPEG, JPG.
-                  </p>
-               </div>
-
-               <div className="inline-flex">
-                  <div className="relative">
-                     <Image
-                        priority
-                        src={previewImage || user?.image || "/images/user.png"}
-                        alt="Profile picture"
-                        width="144"
-                        height="144"
-                        className="pointer-events-none size-36 rounded-full border border-gray-200 object-cover"
-                     />
-
-                     <input
-                        multiple
-                        type="file"
-                        id="image"
-                        className="absolute inset-0 z-50 opacity-0"
-                        accept="image/png, image/jpeg, image/jpg"
-                        {...register("image")}
-                     />
+            <div className="space-y-8">
+               <div className="grid items-center justify-between gap-x-5 gap-y-4">
+                  <div className="space-y-2">
+                     <Label htmlFor="image">Profile Photo</Label>
+                     <p className="text-muted-foreground text-sm">
+                        Upload a photo to personalize your profile. Supported formats: PNG, JPEG,
+                        JPG.
+                     </p>
                   </div>
 
-                  {errors.image && (
-                     <span className="text-destructive text-sm">
-                        {errors.image.message as string}
-                     </span>
-                  )}
+                  <div className="inline-flex">
+                     <div className="relative">
+                        <Image
+                           priority
+                           src={previewImage || user?.image || "/images/user.png"}
+                           alt="Profile picture"
+                           width="144"
+                           height="144"
+                           className="pointer-events-none size-36 rounded-full border border-gray-200 object-cover"
+                        />
+
+                        <input
+                           multiple
+                           type="file"
+                           id="image"
+                           className="absolute inset-0 z-50 opacity-0"
+                           accept="image/png, image/jpeg, image/jpg"
+                           {...register("image")}
+                        />
+                     </div>
+
+                     {errors.image && (
+                        <span className="text-destructive text-sm">
+                           {errors.image.message as string}
+                        </span>
+                     )}
+                  </div>
+               </div>
+
+               <div className="grid max-w-md gap-6 lg:max-w-none lg:grid-cols-2">
+                  <Input
+                     id="name"
+                     label="Full Name"
+                     autoComplete="name"
+                     {...register("name")}
+                     error={errors.name}
+                  />
+
+                  <Input
+                     id="email"
+                     label="Email"
+                     autoComplete="email"
+                     {...register("email")}
+                     error={errors.email}
+                  />
                </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-6">
-               <Input
-                  id="name"
-                  label="Full Name"
-                  autoComplete="name"
-                  {...register("name")}
-                  error={errors.name}
-               />
-
-               <Input
-                  id="email"
-                  label="Email"
-                  autoComplete="email"
-                  {...register("email")}
-                  error={errors.email}
-               />
-            </div>
+            <Button className="col-start-2 max-w-xs">Save Changes</Button>
          </div>
-
-         <Button className="col-start-2 max-w-xs">Save Changes</Button>
       </form>
    );
 }

@@ -15,8 +15,8 @@ export default async function Home() {
 
    return (
       <section className="h-screen bg-gray-100">
-         <section className="box-container grid size-full h-screen grid-cols-[20rem_1fr_24rem] gap-6">
-            <aside className="flex flex-col pt-20">
+         <section className="box-container grid size-full h-screen grid-cols-[1fr_20rem] gap-4 xl:grid-cols-[20rem_1fr_24rem] xl:gap-6">
+            <aside className="hidden flex-col pt-20 xl:flex">
                <div className="space-y-4 rounded-xl bg-white p-4">
                   <div className="relative w-full overflow-hidden rounded-lg bg-gradient-to-r from-gray-200 to-gray-300">
                      <Image

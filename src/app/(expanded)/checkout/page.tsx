@@ -89,7 +89,11 @@ function CheckoutContent() {
    };
 
    return (
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full bg-white">
+      <form
+         data-testid="checkout-form"
+         onSubmit={handleSubmit(onSubmit)}
+         className="w-full bg-white"
+      >
          <section className="mx-auto grid size-full h-screen max-w-6xl grid-cols-[1fr_24rem] gap-4 overflow-hidden bg-white">
             <main className="scroll-hide flex h-screen flex-col gap-y-4 overflow-y-auto p-6 pt-20">
                {shouldShowPaymentSystem ? (
@@ -207,6 +211,7 @@ function CheckoutContent() {
                      </div>
                   </div>
                   <Button
+                     data-testid="place-order-button"
                      type={orderId ? "button" : "submit"}
                      onClick={handleOnClick}
                      className="mt-6 w-full font-semibold"

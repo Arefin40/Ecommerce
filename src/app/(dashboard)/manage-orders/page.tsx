@@ -44,7 +44,9 @@ async function ManageOrders() {
                         <td className="px-4 py-2">
                            {new Date(order.orderedAt).toLocaleDateString()}
                         </td>
-                        <td className="px-4 py-2">{getStatusBadge(order.status)}</td>
+                        <td data-testid="order-status" className="px-4 py-2">
+                           {getStatusBadge(order.status)}
+                        </td>
                         <td className="px-4 py-2">{getPaymentStatusBadge(order.isPaid)}</td>
                         <td className="px-4 py-2">${order.totalPrice}</td>
                         <td className="flex items-center justify-end px-4 py-2">

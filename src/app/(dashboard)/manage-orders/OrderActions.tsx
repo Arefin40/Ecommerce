@@ -19,22 +19,34 @@ function OrderActions({ orderId }: { orderId: string }) {
    return (
       <DropdownMenu>
          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button data-testid="manage-order-button" variant="ghost" size="icon">
                <MoreHorizontal className="h-4 w-4" />
             </Button>
          </DropdownMenuTrigger>
          <DropdownMenuContent>
             <DropdownMenuItem>View Details</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleStatusUpdate(orderId, "processing")}>
+            <DropdownMenuItem
+               data-testid="processing-button"
+               onClick={() => handleStatusUpdate(orderId, "processing")}
+            >
                Mark as Processing
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleStatusUpdate(orderId, "shipped")}>
+            <DropdownMenuItem
+               data-testid="shipped-button"
+               onClick={() => handleStatusUpdate(orderId, "shipped")}
+            >
                Mark as Shipped
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleStatusUpdate(orderId, "delivered")}>
+            <DropdownMenuItem
+               data-testid="delivered-button"
+               onClick={() => handleStatusUpdate(orderId, "delivered")}
+            >
                Mark as Delivered
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleStatusUpdate(orderId, "cancelled")}>
+            <DropdownMenuItem
+               data-testid="cancelled-button"
+               onClick={() => handleStatusUpdate(orderId, "cancelled")}
+            >
                Cancel Order
             </DropdownMenuItem>
          </DropdownMenuContent>

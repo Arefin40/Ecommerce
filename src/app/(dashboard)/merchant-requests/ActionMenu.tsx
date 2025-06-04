@@ -17,14 +17,18 @@ interface ActionMenuProps {
 const ActionMenu: React.FC<ActionMenuProps> = ({ id, disabled = false }) => {
    return (
       <DropdownMenu>
-         <DropdownMenuTrigger asChild>
+         <DropdownMenuTrigger asChild data-testid="manage-merchant-request-button">
             <Button variant="ghost" size="icon" className="rounded-full" disabled={disabled}>
                <MoreVertical size={20} />
             </Button>
          </DropdownMenuTrigger>
          <DropdownMenuContent side="right">
-            <DropdownMenuItem onClick={() => approveApplication(id)}>Approve</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => rejectApplication(id)}>Reject</DropdownMenuItem>
+            <DropdownMenuItem data-testid="approve-button" onClick={() => approveApplication(id)}>
+               Approve
+            </DropdownMenuItem>
+            <DropdownMenuItem data-testid="reject-button" onClick={() => rejectApplication(id)}>
+               Reject
+            </DropdownMenuItem>
          </DropdownMenuContent>
       </DropdownMenu>
    );

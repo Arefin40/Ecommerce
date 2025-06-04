@@ -25,7 +25,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({
 }) => {
    return (
       <DropdownMenu>
-         <DropdownMenuTrigger asChild>
+         <DropdownMenuTrigger asChild data-testid="manage-user-action-button">
             <Button variant="ghost" size="icon" className="rounded-full" disabled={disabled}>
                <MoreVertical size={20} />
             </Button>
@@ -35,10 +35,20 @@ const ActionMenu: React.FC<ActionMenuProps> = ({
                Change Role
             </DropdownMenuLabel>
             {!hideUser && (
-               <DropdownMenuItem onClick={() => changeRole(id, "user")}>User</DropdownMenuItem>
+               <DropdownMenuItem
+                  data-testid="user-role-button"
+                  onClick={() => changeRole(id, "user")}
+               >
+                  User
+               </DropdownMenuItem>
             )}
             {!hideAdmin && (
-               <DropdownMenuItem onClick={() => changeRole(id, "admin")}>Admin</DropdownMenuItem>
+               <DropdownMenuItem
+                  data-testid="admin-role-button"
+                  onClick={() => changeRole(id, "admin")}
+               >
+                  Admin
+               </DropdownMenuItem>
             )}
          </DropdownMenuContent>
       </DropdownMenu>

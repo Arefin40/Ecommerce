@@ -26,7 +26,7 @@ export default async function OrdersPage() {
 
    if (!orders || orders.length < 1) {
       return (
-         <div className="flex flex-col items-center justify-center space-y-4 py-16">
+         <div className="flex-center h-screen flex-col space-y-4 py-16">
             <Package className="text-muted-foreground size-16" />
             <h2 className="text-2xl font-medium">No orders yet</h2>
             <p className="text-muted-foreground">Your order history will appear here</p>
@@ -41,8 +41,8 @@ export default async function OrdersPage() {
    }
 
    return (
-      <main className="h-full bg-white">
-         <div className="box-container grid h-full grid-cols-[1fr_24rem] gap-x-4">
+      <main className="h-full overflow-y-auto bg-white">
+         <div className="box-container grid h-full gap-x-4 xl:grid-cols-[1fr_24rem]">
             <div className="px-4 py-8 pt-24">
                <header className="h-16 space-y-1">
                   <div className="flex items-center gap-x-2">
@@ -136,7 +136,7 @@ export default async function OrdersPage() {
                                           priority
                                           src={p.productImage}
                                           alt={p.productName}
-                                          className="size-full object-contain"
+                                          className="aspect-square size-full rounded-md object-cover object-center"
                                           sizes="5rem"
                                        />
                                     </div>
@@ -149,7 +149,7 @@ export default async function OrdersPage() {
                </div>
             </div>
 
-            <aside className="sticky top-24 h-full w-80 pt-40">
+            <aside className="sticky top-24 hidden h-full w-80 pt-40 xl:block">
                <div className="rounded-xl border bg-white p-6 shadow-sm">
                   <h3 className="mb-4 text-lg font-semibold">Order Status</h3>
                   <div className="relative">

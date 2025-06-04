@@ -25,7 +25,7 @@ async function ProductDetailsPage({ params }: { params: Promise<{ id: string }> 
                <span>/</span>
                <span>{p.category}</span>
             </nav>
-            <div className="grid gap-12 lg:grid-cols-2">
+            <div className="grid gap-12 md:grid-cols-2">
                <ProductImages product={p} />
 
                <div className="space-y-8">

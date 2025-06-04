@@ -48,7 +48,7 @@ export default async function ManageUsers() {
                         <td className="px-4 py-2 text-sm">
                            <a href={`mailto:${user.email}`}>{user.email}</a>
                         </td>
-                        <td className="px-4 py-2 text-sm">
+                        <td data-testid="user-role" className="px-4 py-2 text-sm">
                            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                         </td>
                         <td className="flex items-center justify-end px-4 py-2 text-sm">

@@ -22,7 +22,7 @@ declare global {
 // User, merchant, and admin login command
 Cypress.Commands.add("login", (role: LoginRole) => {
    cy.visit(loginCredentials[role].url);
-   cy.get('aside[data-test="auth-sidebar"]').invoke("hide");
+   if (role === "user") cy.get('aside[data-test="auth-sidebar"]').invoke("hide");
    cy.get('form[data-testid="signin-form"]').should("be.visible");
    cy.get('input[name="email"]').type(loginCredentials[role].email);
    cy.get('input[name="password"]').type(loginCredentials[role].password);

@@ -1,14 +1,16 @@
 "use client";
 
-import EmptyWishlist from "@/icons/EmptyWishlist";
-import { useWishlistItems, useClearWishlist } from "@/hooks/wishlist";
+import { cn } from "@/lib/utils";
 import { Heart } from "@/icons";
+import { useWishlistItems, useClearWishlist } from "@/hooks/wishlist";
 import ProductCard from "@/components/ProductCard";
+import EmptyWishlist from "@/icons/EmptyWishlist";
 
 export default function WishlistPage() {
-   const { data: wishlistItems = [] } = useWishlistItems();
+   const { data: wishlistItems = [], isLoading } = useWishlistItems();
    const { mutate: clearWishlist } = useClearWishlist();
 
+   if (isLoading) return <LoadingSkeleton />;
    if (wishlistItems.length === 0) return <EmptyState />;
 
    return (
@@ -33,9 +35,45 @@ export default function WishlistPage() {
                </div>
             </header>
 
-            <div className="scroll-hide grid h-full grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] items-start gap-4 overflow-y-auto pt-4">
+            <div
+               className={cn(
+                  "scroll-hide grid h-full items-start gap-4 overflow-y-auto pt-4",
+                  wishlistItems.length > 3
+                     ? "grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]"
+                     : "md:grid-cols-3 xl:grid-cols-4"
+               )}
+            >
                {wishlistItems.map((product) => (
                   <ProductCard key={product.id} product={product} />
+               ))}
+            </div>
+         </main>
+      </section>
+   );
+}
+
+function LoadingSkeleton() {
+   return (
+      <section
+         className="shadow-card relative col-span-1 col-start-2 flex h-full flex-col space-y-6 overflow-hidden rounded-lg bg-white px-10 py-6 pt-20"
+      >
+         <main className="mx-auto w-full max-w-6xl flex-1 overflow-hidden">
+            <header className="flex items-center justify-between pb-2">
+               <div className="h-8 w-32 animate-pulse rounded bg-gray-200" />
+               <div className="flex items-center gap-4">
+                  <div className="h-6 w-20 animate-pulse rounded bg-gray-200" />
+                  <div className="h-8 w-[1px] bg-gray-200"></div>
+                  <div className="h-6 w-20 animate-pulse rounded bg-gray-200" />
+               </div>
+            </header>
+
+            <div className="scroll-hide grid h-full grid-cols-2 items-start gap-4 overflow-y-auto pt-4 md:grid-cols-3 lg:grid-cols-4">
+               {[...Array(4)].map((_, i) => (
+                  <div key={i} className="space-y-3">
+                     <div className="aspect-square w-full animate-pulse rounded-lg bg-gray-200" />
+                     <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+                     <div className="h-4 w-1/2 animate-pulse rounded bg-gray-200" />
+                  </div>
                ))}
             </div>
          </main>

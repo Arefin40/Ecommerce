@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import type { CartItem } from "@/types/Cart";
+import type { CartDetails, CartItem } from "@/types/Cart";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import {
    getCartItems,
@@ -9,13 +9,29 @@ import {
    deleteCartItem
 } from "@/actions/cart";
 
+const calculateCartDetails = (cartItems: CartItem[] | undefined) => {
+   if (!cartItems || !Array.isArray(cartItems)) {
+      return { totalPrice: 0, totalQuantity: 0 };
+   }
+
+   return cartItems.reduce(
+      (acc: { totalPrice: number; totalQuantity: number }, item) => {
+         return {
+            totalPrice: acc.totalPrice + item.quantity * (item?.product?.price || 0),
+            totalQuantity: acc.totalQuantity + item.quantity
+         };
+      },
+      { totalPrice: 0, totalQuantity: 0 }
+   );
+};
+
 export function useCartItems() {
-   return useQuery({
+   return useQuery<{ items: CartItem[]; details: CartDetails }>({
       queryKey: ["cart"],
       queryFn: async () => {
-         const { success, data } = await getCartItems();
-         if (!success || !data) return [];
-         return data;
+         const { success, data = [] } = await getCartItems();
+         if (!success || !data) return { items: [], details: { totalPrice: 0, totalQuantity: 0 } };
+         return { items: data as CartItem[], details: calculateCartDetails(data) as CartDetails };
       }
    });
 }
