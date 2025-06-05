@@ -22,7 +22,7 @@ export default function FollowButton({
       setIsPending(true);
       setOptimisticFollow(!optimisticFollow);
       try {
-      await toggleFollowStore(storeId, "/");
+         await toggleFollowStore(storeId, "/");
       } catch {
          setOptimisticFollow(isFollowed);
       } finally {
@@ -32,6 +32,7 @@ export default function FollowButton({
 
    return (
       <Button
+         data-test="store-follow-button"
          onClick={() => toggleFollow(storeId)}
          size="sm"
          disabled={isPending}

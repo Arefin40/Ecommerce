@@ -58,4 +58,17 @@ describe("Features Testing", () => {
       cy.wait(3000);
       cy.get('[data-testid="empty-wishlist"]').should("not.exist");
    });
+
+   it("should toggle store follow", () => {
+      cy.visit("/");
+      cy.get('[data-test="store-follow-button"]').should("be.visible").first().as("followButton");
+
+      cy.get("@followButton").then(($button) => {
+         const initialText = $button.text();
+         const expectedText = initialText === "Follow" ? "Following" : "Follow";
+
+         cy.get("@followButton").click();
+         cy.get("@followButton").should("contain", expectedText);
+      });
+   });
 });
