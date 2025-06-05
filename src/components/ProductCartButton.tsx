@@ -13,6 +13,7 @@ export function WishlistButton({ productId }: { productId: string }) {
 
    return (
       <Button
+         data-testid="toggle-wishlist-button"
          onClick={() => toggleWishlistItem(productId)}
          size="icon"
          variant="ghost"
