@@ -83,7 +83,12 @@ function AddressForm({ address, onSuccess }: AddressFormProps) {
    };
 
    return (
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4" autoComplete="on">
+      <form
+         data-testid="address-form"
+         onSubmit={handleSubmit(onSubmit)}
+         className="space-y-4 pt-4"
+         autoComplete="on"
+      >
          <Input
             label="Address Label"
             placeholder="e.g. Home, Office, etc."
@@ -134,11 +139,11 @@ function AddressForm({ address, onSuccess }: AddressFormProps) {
 
          <div className="flex justify-center gap-3 pt-2">
             <DialogClose useCrossClasses={false} asChild>
-               <Button type="button" variant="outline">
+               <Button data-testid="cancel-address-button" type="button" variant="outline">
                   Cancel
                </Button>
             </DialogClose>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button data-testid="save-address-button" type="submit" disabled={isSubmitting}>
                {isSubmitting ? (
                   <>
                      <LoaderCircle className="size-4 animate-spin" /> Saving...
@@ -157,8 +162,8 @@ export function CreateNewAddressForm() {
 
    return (
       <Dialog open={open} onOpenChange={setOpen}>
-         <DialogTrigger asChild>
-            <Button variant="outline" className="flex h-full items-center gap-2">
+         <DialogTrigger data-testid="add-new-address-button" asChild>
+            <Button variant="outline" className="flex h-full min-h-16 items-center gap-2">
                <Plus />
                New Address
             </Button>

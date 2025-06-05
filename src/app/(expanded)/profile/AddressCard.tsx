@@ -22,7 +22,10 @@ export function AddressCard({ address }: { address: Address }) {
 
    return (
       <>
-         <div className="border-border relative space-y-2 rounded-lg border p-4 text-sm">
+         <div
+            data-testid="address-card"
+            className="border-border relative space-y-2 rounded-lg border p-4 text-sm"
+         >
             <div className="absolute top-3 right-3">
                <EditAddressForm address={address}>
                   <button className="text-muted-foreground hover:text-foreground">
@@ -38,7 +41,9 @@ export function AddressCard({ address }: { address: Address }) {
                </button>
             </div>
 
-            <h3 className="font-medium">{address.label}</h3>
+            <h3 data-testid="address-label" className="font-medium">
+               {address.label}
+            </h3>
             <address className="text-muted-foreground not-italic">
                {address.address}
                <br />

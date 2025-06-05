@@ -8,7 +8,10 @@ async function AddressBook() {
    const addresses = response.success ? response.data : [];
 
    return (
-      <section className="grid gap-x-12 gap-y-8 rounded-xl bg-white p-6 lg:grid-cols-[1fr_2fr]">
+      <section
+         data-testid="address-book"
+         className="grid gap-x-12 gap-y-8 rounded-xl bg-white p-6 lg:grid-cols-[1fr_2fr]"
+      >
          <div className="border-border space-y-1.5">
             <h2 className="text-lg font-bold">Address Book</h2>
             <p className="text-muted-foreground leading-snug">

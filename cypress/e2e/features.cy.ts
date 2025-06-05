@@ -82,4 +82,27 @@ describe("Features Testing", () => {
       cy.get('[data-testid="add-to-cart-button"]').should("be.visible").click().wait(500);
       cy.get('[data-testid="add-to-wishlist-button"]').should("be.visible").click().wait(1000);
    });
+
+   it("should save an address to address-book", () => {
+      const randomDigits = Math.floor(1000 + Math.random() * 9000);
+      cy.visit("/profile");
+
+      // fill up the address form
+      cy.get('[data-testid="address-book"]').should("be.visible").scrollIntoView();
+      cy.get('[data-testid="add-new-address-button"]').should("be.visible").click();
+      cy.get('input[name="label"]').type(`Test Address ${randomDigits}`);
+      cy.get('input[name="address"]').type("123 Test St, Test City, Test State, 12345");
+      cy.get('input[data-slot="command-input"]').eq(0).type("Dha");
+      cy.get('[data-value="Dhaka"]').first().should("be.visible").click();
+      cy.get('input[data-slot="command-input"]').eq(1).type("Azimp");
+      cy.get('[data-value="Azimpur"]').first().should("be.visible").click();
+      cy.get('input[name="contact"]').type("01345678910");
+      cy.get('[data-testid="save-address-button"]').should("be.visible").click().wait(2000);
+
+      // verify saved address
+      cy.get('[data-testid="address-label"]')
+         .should("be.visible")
+         .contains(`Test Address ${randomDigits}`)
+         .wait(3000);
+   });
 });
