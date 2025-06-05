@@ -105,4 +105,14 @@ describe("Features Testing", () => {
          .contains(`Test Address ${randomDigits}`)
          .wait(3000);
    });
+
+   it("should delete an saved address", () => {
+      cy.visit("/profile");
+      cy.get('[data-testid="address-book"]').should("be.visible").scrollIntoView();
+      cy.get('[data-testid="delete-address-button"]').should("be.visible").last().click();
+      cy.wait(1000);
+      cy.get('[data-testid="confirm-button"]').should("be.visible").click();
+      cy.wait(1000);
+      cy.get('[data-testid="address-card"]').should("not.exist");
+   });
 });

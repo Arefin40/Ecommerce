@@ -118,12 +118,18 @@ export function ConfirmDialog({
             <main className="text-center">{children}</main>
 
             <DialogFooter className="gap-2 sm:justify-center">
-               <Button variant="outline" onClick={handleCancel} className={cancelButtonClass}>
+               <Button
+                  variant="outline"
+                  onClick={handleCancel}
+                  className={cancelButtonClass}
+                  data-testid="cancel-button"
+               >
                   {cancelText}
                </Button>
                <Button
                   variant={variant === "danger" ? "destructive" : "default"}
                   onClick={handleConfirm}
+                  data-testid="confirm-button"
                   className={confirmButtonClass}
                >
                   {confirmText}

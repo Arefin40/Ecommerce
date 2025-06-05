@@ -35,6 +35,7 @@ export function AddressCard({ address }: { address: Address }) {
 
                <button
                   onClick={() => setIsOpen(true)}
+                  data-testid="delete-address-button"
                   className="text-muted-foreground hover:text-destructive ml-2 disabled:cursor-not-allowed disabled:opacity-50"
                >
                   <Trash2 size={16} />
