@@ -17,7 +17,7 @@ interface Product {
 
 export default function ProductCard({ product }: { product: Product }) {
    return (
-      <div key={product.id} className="group space-y-3 rounded-lg">
+      <div data-testid="product-card" key={product.id} className="group space-y-3 rounded-lg">
          <div className="border-border relative aspect-square overflow-hidden rounded-lg border">
             <Link href={`/products/${product.id}/details`} className="block h-full w-full">
                <Image

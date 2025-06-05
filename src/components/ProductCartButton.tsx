@@ -31,6 +31,7 @@ export function AddToCartButton({ productId }: { productId: string }) {
 
    return (
       <Button
+         data-testid="add-to-cart-button"
          onClick={handleAddToCart}
          variant="ghost"
          className="text-foreground flex flex-shrink-0 items-center gap-x-1 rounded-full bg-white/75 p-3 py-2 text-sm backdrop-blur-sm"
