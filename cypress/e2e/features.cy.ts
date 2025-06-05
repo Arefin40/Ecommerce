@@ -71,4 +71,15 @@ describe("Features Testing", () => {
          cy.get("@followButton").should("contain", expectedText);
       });
    });
+
+   it("should navigate to product details from post", () => {
+      cy.get('[data-testid="post"]').should("have.length.at.least", 1);
+      cy.get('[data-testid="post-content"]')
+         .first()
+         .scrollIntoView({ offset: { top: 100, left: 0 } });
+      cy.get('[data-testid="post-product"]').first().click();
+      cy.url().should("include", "/details");
+      cy.get('[data-testid="add-to-cart-button"]').should("be.visible").click().wait(500);
+      cy.get('[data-testid="add-to-wishlist-button"]').should("be.visible").click().wait(1000);
+   });
 });

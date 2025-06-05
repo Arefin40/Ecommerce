@@ -64,7 +64,11 @@ export default async function Home() {
             <main className="scroll-hide flex flex-col overflow-y-auto pt-20">
                <section className="space-y-6">
                   {posts.data?.map((post) => (
-                     <div key={post.id} className="rounded-lg border border-gray-100 bg-white">
+                     <div
+                        key={post.id}
+                        data-testid="post"
+                        className="rounded-lg border border-gray-100 bg-white"
+                     >
                         {/* Post Header */}
                         <header className="flex items-center gap-3 border-b border-gray-100 px-6 py-2.5">
                            <div className="size-12 flex-shrink-0 rounded-full bg-gray-200">
@@ -92,7 +96,7 @@ export default async function Home() {
                         </header>
 
                         {/* Post Content */}
-                        <main>
+                        <main data-testid="post-content">
                            <div className="text-foreground space-y-2.5 px-6 py-3 text-sm whitespace-pre-wrap">
                               {post.content}
                            </div>
@@ -109,6 +113,7 @@ export default async function Home() {
                                  {post.products.map((product, index) => (
                                     <Link
                                        key={index}
+                                       data-testid="post-product"
                                        href={`/products/${product?.id}/details`}
                                        className={`relative block aspect-square h-full w-full overflow-hidden ${
                                           post.products.length === 3 && index === 0

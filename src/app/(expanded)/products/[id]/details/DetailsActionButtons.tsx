@@ -27,6 +27,7 @@ function DetailsActionButtons({ productId }: { productId: string }) {
       <div className="inline-flex items-center justify-start gap-3">
          <Button
             onClick={handleAddToCart}
+            data-testid="add-to-cart-button"
             className="bg-primary hover:bg-primary/90 h-12 w-48 flex-1 gap-2 rounded-full px-8 py-3 text-base font-semibold"
          >
             <ShoppingCart className="h-5 w-5" />
@@ -36,6 +37,7 @@ function DetailsActionButtons({ productId }: { productId: string }) {
          <Button
             onClick={handleAddToWishlist}
             variant="outline"
+            data-testid="add-to-wishlist-button"
             className="h-12 w-48 flex-1 gap-2 rounded-full px-8 py-3 text-base font-semibold"
          >
             <Heart className="h-5 w-5" />
