@@ -29,4 +29,9 @@ describe("Features Testing", () => {
       cy.wait(3000);
       cy.get('[data-testid="empty-cart"]').should("not.exist");
    });
+
+   it("should clear the wishlist", () => {
+      cy.clearWishlist();
+      cy.wait(2000);
+   });
 });

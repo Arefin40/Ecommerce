@@ -28,6 +28,7 @@ export default function WishlistPage() {
                   <div className="h-8 w-[1px] bg-gray-200"></div>
                   <button
                      onClick={() => clearWishlist()}
+                     data-testid="clear-wishlist-button"
                      className="hover:text-primary transition-colors"
                   >
                      Clear All
@@ -55,6 +56,7 @@ export default function WishlistPage() {
 function LoadingSkeleton() {
    return (
       <section
+         data-testid="wishlist-loading"
          className="shadow-card relative col-span-1 col-start-2 flex h-full flex-col space-y-6 overflow-hidden rounded-lg bg-white px-10 py-6 pt-20"
       >
          <main className="mx-auto w-full max-w-6xl flex-1 overflow-hidden">
@@ -83,7 +85,7 @@ function LoadingSkeleton() {
 
 function EmptyState() {
    return (
-      <section className="flex-center h-full pt-20">
+      <section data-testid="empty-wishlist" className="flex-center h-full pt-20">
          <div className="flex-center flex-1 flex-col">
             <EmptyWishlist className="mx-auto w-full max-w-md" />
             <div className="space-y-1">

@@ -51,4 +51,17 @@ Cypress.Commands.add("clearCart", () => {
    });
 });
 
+// Clear wishlist command
+Cypress.Commands.add("clearWishlist", () => {
+   cy.visit("/wishlist");
+   cy.get('[data-testid="wishlist-loading"]').should("not.exist");
+   cy.wait(3000);
+   cy.get("body").then(($body) => {
+      if ($body.find('[data-testid="clear-wishlist-button"]').length > 0) {
+         cy.get('[data-testid="clear-wishlist-button"]').click();
+      }
+      cy.get('[data-testid="empty-wishlist"]').should("be.visible");
+   });
+});
+
 export {};
