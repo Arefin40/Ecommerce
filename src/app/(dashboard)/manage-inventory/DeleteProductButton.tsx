@@ -29,7 +29,7 @@ function DeleteProductButton({ productId }: { productId: string }) {
 
    return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-         <DialogTrigger asChild>
+         <DialogTrigger asChild data-testid="delete-product-button">
             <Button
                size="icon"
                className="text-muted-foreground bg-muted flex-center hover:text-foreground group hover:bg-muted group size-9 rounded-full transition-colors"
@@ -45,10 +45,19 @@ function DeleteProductButton({ productId }: { productId: string }) {
                </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-               <Button variant="outline" onClick={() => setIsOpen(false)}>
+               <Button
+                  data-testid="cancel-button"
+                  variant="outline"
+                  onClick={() => setIsOpen(false)}
+               >
                   Cancel
                </Button>
-               <Button variant="destructive" onClick={handleDelete} disabled={isLoading}>
+               <Button
+                  data-testid="delete-button"
+                  variant="destructive"
+                  onClick={handleDelete}
+                  disabled={isLoading}
+               >
                   {isLoading ? "Deleting..." : "Delete"}
                </Button>
             </DialogFooter>

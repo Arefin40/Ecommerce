@@ -15,6 +15,7 @@ export default async function ManageInventory() {
          actions={
             <Link
                href="/products/create"
+               data-testid="add-product-button"
                className="flex-center bg-primary h-11 rounded-full px-4 text-white"
             >
                Add Product

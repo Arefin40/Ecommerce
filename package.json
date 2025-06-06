@@ -54,6 +54,7 @@
       "@types/node": "^20",
       "@types/react": "^19",
       "@types/react-dom": "^19",
+      "cypress-file-upload": "^5.0.8",
       "drizzle-kit": "^0.30.5",
       "eslint": "9.26.0",
       "eslint-config-next": "15.2.0",
