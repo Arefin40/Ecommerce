@@ -186,7 +186,7 @@ export async function getPostsMyStorePosts() {
          .from(store)
          .where(eq(store.merchant, session.user.id))
          .limit(1);
-      if (_store.length === 0) throw new Error("Store not found");
+      if (_store.length === 0) return { success: false, error: "Store not found" };
 
       // Get the posts of the store
       const _posts = await db

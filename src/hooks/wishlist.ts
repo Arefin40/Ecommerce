@@ -1,7 +1,12 @@
 import toast from "react-hot-toast";
 import type { WishlistItem } from "@/types/Wishlist";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
-import { clearWishlist, getWishlistItems, toggleWishlistItem } from "@/actions/wishlist";
+import {
+   clearWishlist,
+   getWishlistDetails,
+   getWishlistItems,
+   toggleWishlistItem
+} from "@/actions/wishlist";
 
 export function useWishlistItems() {
    return useQuery({
@@ -10,6 +15,15 @@ export function useWishlistItems() {
          const { success, data } = await getWishlistItems();
          if (!success || !data) return [];
          return data;
+      }
+   });
+}
+
+export function useWishlistDetails() {
+   return useQuery({
+      queryKey: ["wishlistDetails"],
+      queryFn: async () => {
+         return await getWishlistDetails();
       }
    });
 }
@@ -29,6 +43,7 @@ export function useToggleWishlistItem() {
       },
       onSettled: () => {
          queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+         queryClient.invalidateQueries({ queryKey: ["wishlistDetails"] });
       }
    });
 }
@@ -51,6 +66,7 @@ export function useClearWishlist() {
       },
       onSettled: () => {
          queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+         queryClient.invalidateQueries({ queryKey: ["wishlistDetails"] });
       }
    });
 }

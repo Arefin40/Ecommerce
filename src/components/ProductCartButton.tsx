@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import toast from "react-hot-toast";
 import { Heart } from "@/icons";
 import { ShoppingCart } from "lucide-react";
-import { addToCart } from "@/actions/cart";
 import { Button } from "@/components/ui/button";
 import { useToggleWishlistItem } from "@/hooks/wishlist";
+import { useAddProductToCart } from "@/hooks/cart";
 
 export function WishlistButton({ productId }: { productId: string }) {
    const { mutate: toggleWishlistItem } = useToggleWishlistItem();
@@ -25,15 +24,12 @@ export function WishlistButton({ productId }: { productId: string }) {
 }
 
 export function AddToCartButton({ productId }: { productId: string }) {
-   const handleAddToCart = async () => {
-      const { success } = await addToCart(productId);
-      if (success) toast.success("Added to cart");
-   };
+   const { mutate: addProductToCart } = useAddProductToCart();
 
    return (
       <Button
          data-testid="add-to-cart-button"
-         onClick={handleAddToCart}
+         onClick={() => addProductToCart(productId)}
          variant="ghost"
          className="text-foreground flex flex-shrink-0 items-center gap-x-1 rounded-full bg-white/75 p-3 py-2 text-sm backdrop-blur-sm"
       >

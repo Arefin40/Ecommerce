@@ -12,5 +12,5 @@ export interface Product {
 
 export type CartDetails = {
    totalQuantity: number;
-   totalPrice: number;
+   totalPrice: string;
 } | null;

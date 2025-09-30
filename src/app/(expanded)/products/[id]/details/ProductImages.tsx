@@ -15,19 +15,18 @@ export default function ProductImages({
    const [previewImage, setPreviewImage] = React.useState(product.image);
 
    return (
-      <div className="space-y-4">
-         <div className="aspect-square overflow-hidden rounded-2xl border bg-white">
-            <Image
-               src={previewImage as string}
-               alt={product.name}
-               width={800}
-               height={800}
-               className="h-full w-full object-cover object-center"
-               priority
-            />
-         </div>
+      <div className="flex flex-1 flex-col space-y-4 gap-x-3 xl:flex-row">
+         <Image
+            src={previewImage as string}
+            alt={product.name}
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="order-1 h-auto w-full rounded-2xl border object-cover object-center xl:order-2"
+            priority
+         />
 
-         <div className="grid grid-cols-4 gap-4">
+         <div className="order-2 flex w-full shrink-0 items-center gap-3 xl:order-1 xl:max-w-24 xl:flex-col">
             <button
                onClick={() => setPreviewImage(product.image)}
                className="aspect-square overflow-hidden rounded-lg border border-gray-100"
@@ -37,9 +36,10 @@ export default function ProductImages({
                   alt={`View ${product.image}`}
                   width={100}
                   height={100}
-                  className="h-full w-full object-cover object-center"
+                  className="size-20 object-cover object-top xl:size-full"
                />
             </button>
+
             {product.images.map((i) => (
                <button
                   key={i}
@@ -51,7 +51,7 @@ export default function ProductImages({
                      alt={`View ${i}`}
                      width={100}
                      height={100}
-                     className="h-full w-full object-cover object-center"
+                     className="size-20 object-cover object-top xl:size-full"
                   />
                </button>
             ))}

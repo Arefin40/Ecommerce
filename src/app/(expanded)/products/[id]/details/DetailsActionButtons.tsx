@@ -1,32 +1,20 @@
 "use client";
 
 import React from "react";
-import toast from "react-hot-toast";
+import { Heart } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
-import { addToCart } from "@/actions/cart";
-import { toggleWishlistItem } from "@/actions/wishlist";
+import { useToggleWishlistItem } from "@/hooks/wishlist";
+import { useAddProductToCart } from "@/hooks/cart";
 
 function DetailsActionButtons({ productId }: { productId: string }) {
-   const handleAddToCart = async () => {
-      const response = await addToCart(productId);
-      if (response.success) {
-         toast.success(response.message ?? "Product added to cart");
-      }
-   };
-
-   const handleAddToWishlist = async () => {
-      const response = await toggleWishlistItem(productId);
-      if (response.success) {
-         toast.success(response.message ?? "Product added to wishlist");
-      }
-   };
+   const { mutate: addProductToCart } = useAddProductToCart();
+   const { mutate: toggleWishlistItem } = useToggleWishlistItem();
 
    return (
       <div className="inline-flex items-center justify-start gap-3">
          <Button
-            onClick={handleAddToCart}
+            onClick={() => addProductToCart(productId)}
             data-testid="add-to-cart-button"
             className="bg-primary hover:bg-primary/90 h-12 w-48 flex-1 gap-2 rounded-full px-8 py-3 text-base font-semibold"
          >
@@ -35,7 +23,7 @@ function DetailsActionButtons({ productId }: { productId: string }) {
          </Button>
 
          <Button
-            onClick={handleAddToWishlist}
+            onClick={() => toggleWishlistItem(productId)}
             variant="outline"
             data-testid="add-to-wishlist-button"
             className="h-12 w-48 flex-1 gap-2 rounded-full px-8 py-3 text-base font-semibold"

@@ -14,9 +14,27 @@ export default async function Home() {
    const bestSeller = await getRandomBestSeller();
 
    return (
-      <section className="h-screen bg-gray-100">
-         <section className="box-container grid size-full h-screen grid-cols-[1fr_20rem] gap-4 xl:grid-cols-[20rem_1fr_24rem] xl:gap-6">
-            <aside className="hidden flex-col pt-20 xl:flex">
+      // <section className="h-screen bg-gray-100 pb-12">
+      //    <section className="box-container grid size-full h-screen grid-cols-[1fr_20rem] gap-4 xl:grid-cols-[20rem_1fr_24rem] xl:gap-6">
+      //       <aside className="hidden flex-col overflow-y-auto bg-red-100 pt-20 pb-12 xl:flex xl:pb-32">
+
+      //       </aside>
+
+      //       <main className="scroll-hide flex flex-col overflow-y-auto pt-20 pb-12 xl:pb-32">
+      //          <section className="space-y-6">
+
+      //          </section>
+      //       </main>
+
+      //       <aside className="flex flex-col gap-y-4 pt-20 pb-12 xl:pb-32">
+
+      //       </aside>
+      //    </section>
+      // </section>
+
+      <section className="h-screen overflow-hidden bg-gray-100">
+         <section className="box-container grid size-full h-screen grid-cols-[1fr_20rem] gap-4 overflow-hidden pt-16 xl:grid-cols-[20rem_1fr_24rem] xl:gap-6">
+            <aside className="scroll-hide h-screen flex-col overflow-y-auto pt-4 pb-20 text-sm">
                <div className="space-y-4 rounded-xl bg-white p-4">
                   <div className="relative w-full overflow-hidden rounded-lg bg-gradient-to-r from-gray-200 to-gray-300">
                      <Image
@@ -48,20 +66,21 @@ export default async function Home() {
                      <div className="absolute right-0 bottom-0 left-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent"></div>
                   </div>
 
-                  <div className="group relative w-full cursor-pointer overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 transition-all duration-500 hover:shadow-lg">
+                  <div className="group relative w-full cursor-pointer rounded-lg border bg-gradient-to-br from-gray-100 to-gray-200 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl">
                      <Image
                         priority
-                        width={563}
-                        height={860}
+                        height={0}
+                        width={0}
+                        sizes="100vw"
                         src="https://res.cloudinary.com/arefin40/image/upload/v1748596259/shobai/ei2oee22gpq05dj2gqzq.jpg"
                         alt="Advertise 3"
-                        className="aspect-auto w-full max-w-full overflow-hidden rounded-lg object-contain object-center"
+                        className="h-auto w-full rounded-lg object-contain object-center"
                      />
                   </div>
                </div>
             </aside>
 
-            <main className="scroll-hide flex flex-col overflow-y-auto pt-20">
+            <main className="scroll-hide h-screen flex-col overflow-y-auto pt-4 pb-20">
                <section className="space-y-6">
                   {posts.data?.map((post) => (
                      <div
@@ -148,8 +167,8 @@ export default async function Home() {
                </section>
             </main>
 
-            <aside className="flex flex-col gap-y-4 pt-20">
-               <div className="rounded-xl bg-white px-4 py-6">
+            <aside className="scroll-hide h-screen flex-col space-y-4 overflow-y-auto pt-4 pb-20 text-sm">
+               <div className="rounded-xl bg-white p-4">
                   <div className="space-y-4">
                      <h1 className="text-muted-foreground">Trending Stores</h1>
                      <div className="flex flex-col gap-y-4">
@@ -180,7 +199,7 @@ export default async function Home() {
                   </div>
                </div>
 
-               <div className="rounded-xl bg-white px-4 py-6">
+               <div className="rounded-xl bg-white p-4">
                   <div className="space-y-4">
                      <h1 className="text-muted-foreground">Best Seller</h1>
 
@@ -207,14 +226,14 @@ export default async function Home() {
                   </div>
                </div>
 
-               <div className="group relative w-full cursor-pointer overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl">
+               <div className="group relative w-full cursor-pointer rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl">
                   <Image
                      priority
                      width={999}
                      height={666}
-                     className="aspect-auto w-full max-w-full object-contain object-center"
+                     className="aspect-auto w-full max-w-full rounded-lg object-contain object-center"
                      src="https://res.cloudinary.com/arefin40/image/upload/v1748596823/shobai/cruunfhdt4skzxj119jf.webp"
-                     alt="Advertise 1"
+                     alt="BKash Offer"
                   />
                </div>
             </aside>

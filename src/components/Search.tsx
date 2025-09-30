@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+
 import Link from "next/link";
 import Image from "next/image";
-import { SearchIcon } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { LoaderCircle, SearchIcon } from "lucide-react";
 import { search } from "@/actions/search";
 
 interface SearchItem {
@@ -12,15 +13,14 @@ interface SearchItem {
 }
 
 interface SuggestedListItemProps extends React.ComponentProps<"li"> {
-   type: "store" | "product";
-   id?: string;
    image?: string;
+   href: string;
 }
 
-function SuggestedListItem({ children, type, id, image }: SuggestedListItemProps) {
+function SuggestedListItem({ children, image, href, ...props }: SuggestedListItemProps) {
    return (
-      <li className="hover:bg-accent hover:text-accent-foreground rounded-md p-2">
-         <Link href={`/${type}s/${id}`} className="flex list-none items-center gap-2">
+      <li className="hover:bg-accent hover:text-accent-foreground rounded-md p-2" {...props}>
+         <Link href={href} className="flex list-none items-center gap-2">
             {image && (
                <Image
                   src={image}
@@ -31,7 +31,6 @@ function SuggestedListItem({ children, type, id, image }: SuggestedListItemProps
                   className="size-8 overflow-hidden rounded-full object-cover object-top"
                />
             )}
-
             <span className="text-foreground font-semibold">{children}</span>
          </Link>
       </li>
@@ -39,75 +38,121 @@ function SuggestedListItem({ children, type, id, image }: SuggestedListItemProps
 }
 
 function Search() {
+   const [showResults, setShowResults] = useState(false);
    const [query, setQuery] = useState("");
    const [results, setResults] = useState<{ stores: SearchItem[]; products: SearchItem[] }>({
       stores: [],
       products: []
    });
+   const [isLoading, setIsLoading] = useState(false);
+   const searchRef = useRef<HTMLDivElement>(null);
 
-   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
+   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
+      setShowResults(value.trim() !== "");
       setQuery(value);
 
-      if (value) {
-         const data = await search(value);
-         setResults(data);
-      } else {
-         setResults({ stores: [], products: [] });
+      if (debounceTimer.current) {
+         clearTimeout(debounceTimer.current);
       }
+
+      setIsLoading(true);
+      debounceTimer.current = setTimeout(async () => {
+         if (value.trim()) {
+            try {
+               const data = await search(value);
+               setResults(data);
+            } catch (error) {
+               console.error("Search failed:", error);
+            } finally {
+               setIsLoading(false);
+            }
+         } else {
+            setResults({ stores: [], products: [] });
+            setIsLoading(false);
+         }
+      }, 300);
    };
 
+   useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+         if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+            setShowResults(false);
+         }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+         document.removeEventListener("mousedown", handleClickOutside);
+      };
+   }, []);
+
    return (
-      <div className="relative w-full max-w-xl">
-         <main className="bg-muted text-muted-foreground peer relative flex w-full items-center gap-2 rounded-full px-4 py-3">
+      <div className="group relative w-full max-w-xl" ref={searchRef}>
+         <div className="text-muted-foreground peer relative flex w-full items-center gap-2 rounded-full bg-gray-200 px-4 py-3">
             <SearchIcon className="size-5 shrink-0" />
             <input
+               autoComplete="off"
                type="search"
                id="search"
                name="search"
                placeholder="Search"
+               role="searchbox"
                value={query}
                onChange={handleSearch}
-               className="placeholder-muted-foreground text-foreground absolute inset-0 w-full pr-4 pl-11 text-sm outline-none"
+               onFocus={() => setShowResults(true)}
+               className="placeholder-muted-foreground text-foreground absolute inset-0 w-full appearance-none pr-4 pl-11 text-sm outline-none"
             />
-         </main>
+         </div>
 
-         {(results.stores.length > 0 || results.products.length > 0) && (
-            <div className="bg-background shadow-card absolute inset-x-0 top-full mt-1 space-y-5 rounded-lg border border-gray-50 py-4 text-sm">
-               {results.stores.length > 0 && (
-                  <div className="space-y-3">
-                     <h2 className="text-muted-foreground px-4 font-semibold">Stores</h2>
-                     <ul className="px-2">
-                        {results.stores.map((store) => (
-                           <SuggestedListItem
-                              type="store"
-                              key={store.id}
-                              id={store.id}
-                              image={store.image ?? ""}
-                           >
-                              {store.name}
-                           </SuggestedListItem>
-                        ))}
-                     </ul>
+         {showResults && query !== "" && (
+            <div
+               id="search-results"
+               className="bg-background shadow-card absolute inset-x-0 top-full z-50 mt-1 space-y-4 rounded-lg border border-gray-50 py-4 text-sm"
+            >
+               {isLoading ? (
+                  <div className="flex-center px-4">
+                     <LoaderCircle className="animate-spin" />
                   </div>
-               )}
-
-               {results.products.length > 0 && (
-                  <div className="space-y-3">
-                     <h2 className="text-muted-foreground px-4 font-semibold">Products</h2>
-                     <ul className="px-2">
-                        {results.products.map((product) => (
-                           <SuggestedListItem
-                              type="product"
-                              key={product.id}
-                              id={product.id}
-                              image={product.image ?? ""}
-                           >
-                              {product.name}
-                           </SuggestedListItem>
-                        ))}
-                     </ul>
-                  </div>
+               ) : results.stores.length > 0 || results.products.length > 0 ? (
+                  <>
+                     {results.stores.length > 0 && (
+                        <div className="space-y-1">
+                           <h2 className="text-muted-foreground px-4 font-semibold">Stores</h2>
+                           <ul className="px-2">
+                              {results.stores.map((store) => (
+                                 <SuggestedListItem
+                                    href={`/stores/${store.id}`}
+                                    key={store.id}
+                                    image={store.image ?? ""}
+                                 >
+                                    {store.name}
+                                 </SuggestedListItem>
+                              ))}
+                           </ul>
+                        </div>
+                     )}
+                     {results.products.length > 0 && (
+                        <div className="space-y-1">
+                           <h2 className="text-muted-foreground px-4 font-semibold">Products</h2>
+                           <ul className="px-2">
+                              {results.products.map((product) => (
+                                 <SuggestedListItem
+                                    href={`/products/${product.id}/details`}
+                                    key={product.id}
+                                    image={product.image ?? ""}
+                                 >
+                                    {product.name}
+                                 </SuggestedListItem>
+                              ))}
+                           </ul>
+                        </div>
+                     )}
+                  </>
+               ) : (
+                  <span className="px-4">No results found for &quot;{query}&quot;</span>
                )}
             </div>
          )}

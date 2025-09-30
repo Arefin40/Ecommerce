@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import UserMenu from "@/components/UserMenu";
 import Search from "@/components/Search";
+import { CartBadge, WishlistBadge } from "./CartAndWishlistBadges";
 
 async function Header() {
    return (
@@ -30,8 +31,14 @@ async function Header() {
             {/* Right zone */}
             <div className="flex w-full items-center justify-end gap-x-4">
                <LinkItem href="/products" icon={<MarketplaceIcon />} />
-               <LinkItem href="/cart" icon={<CartIcon />} />
-               <LinkItem href="/wishlist" icon={<WishlistIcon />} />
+               <div className="relative inline-block">
+                  <LinkItem href="/cart" icon={<CartIcon />} />
+                  <CartBadge />
+               </div>
+               <div className="relative inline-block">
+                  <LinkItem href="/wishlist" icon={<WishlistIcon />} />
+                  <WishlistBadge />
+               </div>
                <UserMenu />
             </div>
          </section>

@@ -11,13 +11,21 @@ import {
 
 export const description = "A simple area chart";
 
-const chartData = [
-   { month: "December", sales: 186 },
-   { month: "January", sales: 305 },
-   { month: "February", sales: 237 },
-   { month: "March", sales: 73 },
-   { month: "April", sales: 209 },
-   { month: "May", sales: 214 }
+const adminChartData = [
+   { month: "January", sales: 186 },
+   { month: "February", sales: 305 },
+   { month: "March", sales: 237 },
+   { month: "April", sales: 73 },
+   { month: "May", sales: 209 },
+   { month: "June", sales: 214 }
+];
+const merchantChartData = [
+   { month: "January", sales: 0 },
+   { month: "February", sales: 0 },
+   { month: "March", sales: 0 },
+   { month: "April", sales: 0 },
+   { month: "May", sales: 0 },
+   { month: "June", sales: 1 }
 ];
 
 const chartConfig = {
@@ -27,7 +35,7 @@ const chartConfig = {
    }
 } satisfies ChartConfig;
 
-export function MonthlySales() {
+export function MonthlySales({ role = "merchant" }: { role: "admin" | "merchant" }) {
    return (
       <Card>
          <CardHeader>
@@ -38,7 +46,7 @@ export function MonthlySales() {
             <ChartContainer config={chartConfig}>
                <AreaChart
                   accessibilityLayer
-                  data={chartData}
+                  data={role === "merchant" ? merchantChartData : adminChartData}
                   margin={{
                      left: 12,
                      right: 12

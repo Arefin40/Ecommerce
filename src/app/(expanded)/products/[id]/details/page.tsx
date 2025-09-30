@@ -25,10 +25,11 @@ async function ProductDetailsPage({ params }: { params: Promise<{ id: string }> 
                <span>/</span>
                <span>{p.category}</span>
             </nav>
-            <div className="grid gap-12 md:grid-cols-2">
+
+            <div className="flex flex-col gap-12 lg:flex-row">
                <ProductImages product={p} />
 
-               <div className="space-y-8">
+               <div className="max-w-xl space-y-8">
                   {/* Store Info */}
                   <div className="inline-flex items-center gap-3 rounded-full bg-gray-100 p-1.5">
                      <Image

@@ -34,11 +34,11 @@ const chartConfig = {
    }
 } satisfies ChartConfig;
 
-export function MonthlyUsers() {
+export function MonthlyUsers({ role = "merchant" }) {
    return (
       <Card>
          <CardHeader>
-            <CardTitle>Monthly Customer</CardTitle>
+            <CardTitle>Monthly {role === "merchant" ? "Orders" : "Customer"}</CardTitle>
             <CardDescription>January - June 2024</CardDescription>
          </CardHeader>
          <CardContent>

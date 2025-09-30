@@ -13,13 +13,21 @@ import {
 
 export const description = "A radar chart with a legend";
 
-const chartData = [
+const adminChartData = [
    { month: "December", female: 186, male: 80 },
    { month: "January", female: 305, male: 200 },
    { month: "February", female: 237, male: 120 },
    { month: "March", female: 73, male: 190 },
    { month: "April", female: 209, male: 130 },
    { month: "May", female: 214, male: 140 }
+];
+const merchantChartData = [
+   { month: "December", female: 0, male: 0 },
+   { month: "January", female: 0, male: 0 },
+   { month: "February", female: 0, male: 0 },
+   { month: "March", female: 0, male: 0 },
+   { month: "April", female: 0, male: 0 },
+   { month: "May", female: 0, male: 0 }
 ];
 
 const chartConfig = {
@@ -33,7 +41,7 @@ const chartConfig = {
    }
 } satisfies ChartConfig;
 
-export function GenderChart() {
+export function GenderChart({ role = "admin" }: { role: "admin" | "merchant" }) {
    return (
       <Card>
          <CardHeader className="pb-4">
@@ -43,7 +51,7 @@ export function GenderChart() {
          <CardContent>
             <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
                <RadarChart
-                  data={chartData}
+                  data={role === "merchant" ? merchantChartData : adminChartData}
                   margin={{
                      top: -40,
                      bottom: -10

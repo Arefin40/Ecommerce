@@ -5,12 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import EmptyCart from "@/icons/EmptyCart";
 import { Input } from "@/components/ui/form";
-import { useCartItems, useClearCart, useDeleteCartItem, useUpdateCart } from "@/hooks/cart";
+import {
+   useCartDetails,
+   useCartItems,
+   useClearCart,
+   useDeleteCartItem,
+   useUpdateCart
+} from "@/hooks/cart";
 import { ArrowLeft, ArrowRight, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function CartPage() {
-   const { data: cartData, isLoading } = useCartItems();
+   const { data: cartData, isLoading: isLoadingData } = useCartItems();
+   const { data: cartDetails, isLoading: isLoadingDetails } = useCartDetails();
+
    const { mutate: updateQuantity } = useUpdateCart();
    const { mutate: clearCart } = useClearCart();
    const { mutate: deleteCartItem } = useDeleteCartItem();
@@ -24,9 +32,8 @@ export default function CartPage() {
       await deleteCartItem(productId);
    };
 
-   console.log(cartData);
-   if (isLoading) return <CartIsLoading />;
-   else if (!cartData?.items || !cartData?.items.length) return <EmptyState />;
+   if (isLoadingData || isLoadingDetails) return <CartIsLoading />;
+   else if (!cartData || !cartData.length) return <EmptyState />;
 
    return (
       <main className="h-screen overflow-hidden bg-gray-100 pt-20 pb-6">
@@ -37,7 +44,7 @@ export default function CartPage() {
                   <div className="flex items-center gap-4">
                      <p className="space-x-1.5">
                         <span className="text-foreground font-semibold">
-                           {cartData.details?.totalQuantity || 0}
+                           {cartDetails?.totalQuantity || 0}
                         </span>
                         <span>items</span>
                      </p>
@@ -65,7 +72,7 @@ export default function CartPage() {
                      data-testid="cart-items"
                      className="scroll-hide flex-1 overflow-hidden overflow-y-auto"
                   >
-                     {cartData.items.map((item) => (
+                     {cartData.map((item) => (
                         <div
                            data-testid="cart-item"
                            key={item.product?.id}
@@ -157,7 +164,7 @@ export default function CartPage() {
                      <p className="space-x-1.5">
                         <span>Total:</span>
                         <span className="text-foreground font-semibold">
-                           {cartData.details?.totalPrice || 0} Tk.
+                           {cartDetails?.totalPrice || 0} Tk.
                         </span>
                      </p>
 
@@ -186,7 +193,7 @@ export default function CartPage() {
                      <p className="flex justify-between">
                         <span className="text-gray-700">Sub Total</span>
                         <span className="font-semibold">
-                           {cartData.details?.totalPrice || 0} BDT
+                           {parseFloat(cartDetails?.totalPrice || "0")} BDT
                         </span>
                      </p>
                      <p className="flex justify-between">
@@ -195,7 +202,7 @@ export default function CartPage() {
                            <span className="text-muted-foreground ml-1">/ 5%</span>
                         </span>
                         <span className="font-semibold">
-                           {(cartData.details?.totalPrice || 0) * 0.05} BDT
+                           {parseFloat(cartDetails?.totalPrice || "0") * 0.05} BDT
                         </span>
                      </p>
                      <p className="flex justify-between">
@@ -208,7 +215,7 @@ export default function CartPage() {
                      <p className="mt-2 flex justify-between border-t pt-4">
                         <span className="font-semibold">Grand Total</span>
                         <span className="font-semibold">
-                           {(cartData.details?.totalPrice || 0) * 1.05 + 100} BDT
+                           {parseFloat(cartDetails?.totalPrice || "0") * 1.05 + 100} BDT
                         </span>
                      </p>
                   </div>

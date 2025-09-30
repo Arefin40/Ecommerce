@@ -34,6 +34,23 @@ export async function getWishlistItems() {
    }
 }
 
+export async function getWishlistDetails() {
+   "use server";
+   try {
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user) throw new Error("Unauthorized");
+
+      const items = await db.select().from(wishlist).where(eq(wishlist.user, session.user.id));
+      if (items.length === 0) return { success: true, count: 0, items: [] };
+
+      const ids = items.map((item) => item.product);
+      return { success: true, count: ids.length, items: ids };
+   } catch (error) {
+      console.error("Error getting wishlist details:", error);
+      return { success: false, count: 0, items: [] };
+   }
+}
+
 export async function toggleWishlistItem(productId: string, invalidatePath = "/wishlist") {
    "use server";
    try {

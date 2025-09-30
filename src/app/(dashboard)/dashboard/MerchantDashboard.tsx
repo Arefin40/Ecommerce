@@ -1,6 +1,6 @@
 import React from "react";
 import DashboardContainer from "@/components/DashboardContainer";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import { GenderChart } from "@/components/GenderChart";
 import { MonthlySales } from "@/components/MonthlySales";
 import { cn, formatDate } from "@/lib/utils";
@@ -10,13 +10,13 @@ import { getStatusBadge } from "@/lib/status-badges";
 
 const stats = {
    revenue: {
-      weekly: { title: "Weekly Revenue", value: "$2.302", change: "+20%" },
-      monthly: { title: "Monthly Income", value: "$10.000", change: "+15%" },
-      yearly: { title: "Annual Income", value: "$120.000", change: "+10%" }
+      weekly: { title: "Weekly Revenue", value: "$2200.000", change: "0%" },
+      monthly: { title: "Monthly Income", value: "$2200.000", change: "0%" },
+      yearly: { title: "Annual Income", value: "$2200.000", change: "0%" }
    }
 };
 
-async function AdminDashboard() {
+async function MerchantDashboard() {
    const { data: orders } = await getAllOrders();
 
    return (
@@ -26,7 +26,7 @@ async function AdminDashboard() {
          className="bg-[#FDFDFD]"
          mainClassName="px-4"
       >
-         <section className="grid h-full gap-4 xl:grid-cols-[1fr_20rem]">
+         <section className="grid h-full gap-4">
             <main className="space-y-4">
                <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-x-4">
@@ -50,12 +50,12 @@ async function AdminDashboard() {
 
                <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-x-4">
-                     <GenderChart role="admin" />
-                     <MonthlySales role="admin" />
+                     <GenderChart role="merchant" />
+                     <MonthlySales role="merchant" />
                   </div>
                </div>
 
-               <div className="border-border bg-card overflow-hidden rounded-lg border shadow">
+               <div className="border-border bg-card hidden overflow-hidden rounded-lg border shadow">
                   <table className="min-w-full border-collapse text-sm">
                      <thead>
                         <tr>
@@ -92,7 +92,7 @@ async function AdminDashboard() {
                </div>
             </main>
 
-            <aside className="grid grid-cols-2 gap-4 xl:grid-cols-1">
+            <aside className="grid grid-cols-2 gap-4 xl:hidden xl:grid-cols-1">
                <MonthlyUsers />
             </aside>
          </section>
@@ -100,7 +100,7 @@ async function AdminDashboard() {
    );
 }
 
-export default AdminDashboard;
+export default MerchantDashboard;
 
 function StatBlock({ title, value, change }: Record<string, string>) {
    return (
@@ -111,13 +111,16 @@ function StatBlock({ title, value, change }: Record<string, string>) {
                className={cn(
                   "flex items-center gap-x-1 text-base font-semibold",
                   { "text-emerald-500": change.startsWith("+") },
-                  { "text-rose-500": change.startsWith("-") }
+                  { "text-rose-500": change.startsWith("-") },
+                  { "text-primary": change.charAt(0) !== "+" && change.charAt(0) !== "-" }
                )}
             >
                {change.startsWith("+") ? (
                   <TrendingUp className="size-4" />
-               ) : (
+               ) : change.startsWith("-") ? (
                   <TrendingDown className="size-4" />
+               ) : (
+                  <Minus className="size-4" />
                )}
                <span>{change.replace("%", "")}%</span>
             </div>
