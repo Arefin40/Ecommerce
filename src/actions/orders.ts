@@ -229,7 +229,7 @@ export async function updateOrderStatus(
       const session = await auth.api.getSession({ headers: await headers() });
       if (!session?.user) throw new Error("Unauthorized");
 
-      if (session.user.role !== "admin") {
+      if (session?.user.role !== "admin") {
          throw new Error("Unauthorized: Only admins can update order status");
       }
 
