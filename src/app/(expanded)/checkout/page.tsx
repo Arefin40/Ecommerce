@@ -38,6 +38,7 @@ function CheckoutContent() {
       register,
       handleSubmit,
       setValue,
+      getValues,
       watch,
       formState: { errors }
    } = useForm<CheckoutFormValues>({
@@ -80,6 +81,14 @@ function CheckoutContent() {
       }
    };
 
+   const setBillingDetailsToShipping = () => {
+      setValue("shipping_name", getValues("billing_name"));
+      setValue("shipping_phone", getValues("billing_phone"));
+      setValue("shipping_address", getValues("billing_address"));
+      // setValue("shipping_zone", getValues("billing_zone"));
+      // setValue("shipping_area", getValues("billing_area"));
+   };
+
    const onSubmit = async (data: CheckoutFormValues) => {
       const { data: order } = await createOrder(data);
       if (order) {
@@ -110,6 +119,7 @@ function CheckoutContent() {
                      errors={errors}
                      shippingAreas={shippingAreas}
                      billingAreas={billingAreas}
+                     onCheckedBillingDetails={setBillingDetailsToShipping}
                   />
                )}
             </main>

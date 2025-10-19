@@ -22,7 +22,7 @@ export default function ProductImages({
             width={0}
             height={0}
             sizes="100vw"
-            className="order-1 h-auto w-full rounded-2xl border object-cover object-center xl:order-2"
+            className="order-1 h-auto w-full max-w-xl rounded-2xl border object-cover object-center xl:order-2"
             priority
          />
 

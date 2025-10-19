@@ -5,3 +5,4 @@ export { FormSeparator } from "./separator";
 export { Textarea } from "./textarea";
 export { AutoComplete as InputAutoComplete } from "./input-autocomplete";
 export { RadioGroup, RadioGroupItem } from "./radio-group";
+export { Checkbox } from "./checkbox";
